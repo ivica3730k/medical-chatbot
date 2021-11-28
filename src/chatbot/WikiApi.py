@@ -6,8 +6,7 @@ import wikipedia
 
 logging.basicConfig(level=logging.INFO)  # change critical to info to display information
 
-# Initialize the spell checker we are going to use to autocorrect are questions and
-# answers when we load them into our QRPair class
+# Initialize the spell checker we are going to use to autocorrect questions
 _spell = autocorrect.Speller("en")
 
 

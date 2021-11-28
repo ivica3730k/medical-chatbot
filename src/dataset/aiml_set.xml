@@ -88,52 +88,43 @@
 
     <!--- Wikipedia API -->
     <category>
-        <pattern>WHAT IS A *</pattern>
-        <template>#1$
+        <pattern>TELL ME ABOUT *</pattern>
+        <template>wikishort
             <star index="1"/>
         </template>
     </category>
 
     <category>
-        <pattern>WHAT IS AN *</pattern>
-        <template>
-            <srai>WHAT IS A
-                <star/>
-            </srai>
+        <pattern>TELL ME MORE ABOUT *</pattern>
+        <template>wikilong
+            <star index="1"/>
         </template>
     </category>
+
 
     <category>
         <pattern>WHAT IS *</pattern>
         <template>
-            <srai>WHAT IS A
+            <srai>TELL ME ABOUT
                 <star/>
             </srai>
         </template>
     </category>
 
     <category>
-        <pattern>DEFINE *</pattern>
+        <pattern>MORE ABOUT *</pattern>
         <template>
-            <srai>WHAT IS A
+            <srai>TELL ME MORE ABOUT
                 <star/>
             </srai>
         </template>
     </category>
 
-    <category>
-        <pattern>WHO IS *</pattern>
-        <template>
-            <srai>WHAT IS A
-                <star/>
-            </srai>
-        </template>
-    </category>
 
     <!-- Default reaction -->
     <category>
         <pattern>*</pattern>
-        <template>#99$
+        <template>notinaiml
             <star index="1"/>
         </template>
     </category>
