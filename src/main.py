@@ -1,5 +1,5 @@
 # Similarity-based functionality is implemented in QAPairs module. Import it as SimilarityBasedLookup module
-import QAPairs as SimilarityBasedLookup
+from chatbot import QAPairs as SimilarityBasedLookup
 
 if __name__ == "__main__":
     # Similarity based lookup will use data from our csv file, load it in

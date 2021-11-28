@@ -29,6 +29,7 @@ _answers = []
 def load_qa_pair(question: str, answer: str) -> None:
     """
     Load the QA pair into QAPair module
+    
     :param question: Question (as String)
     :param answer: Answer (as String)
     """
@@ -38,7 +39,7 @@ def load_qa_pair(question: str, answer: str) -> None:
     _questions.append(_spell(answer))
 
 
-def _get_real_question_id(question: str) -> int:
+def get_real_question_id(question: str) -> int:
     """
     Perform the similarity-based lookup for the real question from our QA list based on the user-entered question.
 
@@ -66,16 +67,18 @@ def get_answer(question: str) -> str:
     """
     Interface function used to obtain the answer for the question provided, running similarity-based lookup
     in the background.
+
     :param question: User question (as String)
     :return: Answer to user question (as String)
     """
-    question_id = _get_real_question_id(question)
+    question_id = get_real_question_id(question)
     return _answers[question_id]
 
 
 def load_qa_csv(filepath: str) -> None:
     """
     Function used to load qa csv file into module
+
     :param filepath: Path to csv file
     """
     with open(filepath, encoding="latin") as csvfile:
