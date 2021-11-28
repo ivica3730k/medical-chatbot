@@ -41,15 +41,14 @@ The similarity-based component is based on the bag-of-words model, tf/idf, and c
 import csv
 
 import autocorrect
-import nltk
 import numpy as np
 import pandas as pd
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-nltk.download(&#39;punkt&#39;)
-nltk.download(&#39;stopwords&#39;)
+# nltk.download(&#39;punkt&#39;)
+# nltk.download(&#39;stopwords&#39;)
 
 # Initialize the spell checker we are going to use to autocorrect are questions and
 # answers when we load them into our QRPair class
@@ -63,17 +62,16 @@ _answers = []
 def load_qa_pair(question: str, answer: str) -&gt; None:
     &#34;&#34;&#34;
     Load the QA pair into QAPair module
-    
-    :param question: Question (as String)
-    :param answer: Answer (as String)
+
+    Args:
+        question: Question
+        answer: Answer
     &#34;&#34;&#34;
-    # global _questions
-    # global _answers
     _questions.append(_spell(question))
     _questions.append(_spell(answer))
 
 
-def get_real_question_id(question: str) -&gt; int:
+def _get_real_question_id(question: str) -&gt; int:
     &#34;&#34;&#34;
     Perform the similarity-based lookup for the real question from our QA list based on the user-entered question.
 
@@ -83,8 +81,10 @@ def get_real_question_id(question: str) -&gt; int:
     the question list and similarity list (as it&#39;s score is always 1.00). Finally, the index with biggest
     score is returned.
 
-    :param question: User question to apply similarity-based lookup on (as String)
-    :return: Index of question in _questions list best matching to User question input
+    Args:
+        question: User question to apply similarity-based lookup on 
+
+    Returns: Index of question in _questions list best matching to User question input
     &#34;&#34;&#34;
     question = _spell(question)
     _questions.append(question)
@@ -102,10 +102,12 @@ def get_answer(question: str) -&gt; str:
     Interface function used to obtain the answer for the question provided, running similarity-based lookup
     in the background.
 
-    :param question: User question (as String)
-    :return: Answer to user question (as String)
+    Args:
+        question: User question 
+
+    Returns: Answer to user question
     &#34;&#34;&#34;
-    question_id = get_real_question_id(question)
+    question_id = _get_real_question_id(question)
     return _answers[question_id]
 
 
@@ -113,7 +115,8 @@ def load_qa_csv(filepath: str) -&gt; None:
     &#34;&#34;&#34;
     Function used to load qa csv file into module
 
-    :param filepath: Path to csv file
+    Args:
+        filepath: Path to csv file
     &#34;&#34;&#34;
     with open(filepath, encoding=&#34;latin&#34;) as csvfile:
         for l in csv.reader(csvfile, quotechar=&#39;&#34;&#39;, delimiter=&#39;,&#39;,
@@ -128,7 +131,12 @@ def print_qa_pairs() -&gt; None:
     Print QA Pairs for debug purposes
     &#34;&#34;&#34;
     for i in range(0, len(_answers)):
-        print(_questions[i], &#39;&gt;&gt;&#39;, _answers[i])</code></pre>
+        print(_questions[i], &#39;&gt;&gt;&#39;, _answers[i])
+
+
+__pdoc__ = {name: True
+            for name, obj in globals().items()
+            if name.startswith(&#39;_&#39;) and callable(obj)}</code></pre>
 </details>
 </section>
 <section>
@@ -138,32 +146,8 @@ def print_qa_pairs() -&gt; None:
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="chatbot.QAPairs.get_answer"><code class="name flex">
-<span>def <span class="ident">get_answer</span></span>(<span>question: str) ‑> str</span>
-</code></dt>
-<dd>
-<div class="desc"><p>Interface function used to obtain the answer for the question provided, running similarity-based lookup
-in the background.</p>
-<p>:param question: User question (as String)
-:return: Answer to user question (as String)</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def get_answer(question: str) -&gt; str:
-    &#34;&#34;&#34;
-    Interface function used to obtain the answer for the question provided, running similarity-based lookup
-    in the background.
-
-    :param question: User question (as String)
-    :return: Answer to user question (as String)
-    &#34;&#34;&#34;
-    question_id = get_real_question_id(question)
-    return _answers[question_id]</code></pre>
-</details>
-</dd>
-<dt id="chatbot.QAPairs.get_real_question_id"><code class="name flex">
-<span>def <span class="ident">get_real_question_id</span></span>(<span>question: str) ‑> int</span>
+<dt id="chatbot.QAPairs._get_real_question_id"><code class="name flex">
+<span>def <span class="ident">_get_real_question_id</span></span>(<span>question: str) ‑> int</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Perform the similarity-based lookup for the real question from our QA list based on the user-entered question.</p>
@@ -172,13 +156,17 @@ likely wanted to ask. User question is appended to the question list and sparse 
 pandas data frame. Afterwards the cosine similarity is calculated using sklearn, our question is removed from
 the question list and similarity list (as it's score is always 1.00). Finally, the index with biggest
 score is returned.</p>
-<p>:param question: User question to apply similarity-based lookup on (as String)
-:return: Index of question in _questions list best matching to User question input</p></div>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>question</code></strong></dt>
+<dd>User question to apply similarity-based lookup on </dd>
+</dl>
+<p>Returns: Index of question in _questions list best matching to User question input</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_real_question_id(question: str) -&gt; int:
+<pre><code class="python">def _get_real_question_id(question: str) -&gt; int:
     &#34;&#34;&#34;
     Perform the similarity-based lookup for the real question from our QA list based on the user-entered question.
 
@@ -188,8 +176,10 @@ score is returned.</p>
     the question list and similarity list (as it&#39;s score is always 1.00). Finally, the index with biggest
     score is returned.
 
-    :param question: User question to apply similarity-based lookup on (as String)
-    :return: Index of question in _questions list best matching to User question input
+    Args:
+        question: User question to apply similarity-based lookup on 
+
+    Returns: Index of question in _questions list best matching to User question input
     &#34;&#34;&#34;
     question = _spell(question)
     _questions.append(question)
@@ -202,12 +192,46 @@ score is returned.</p>
     return np.argmax(cs)</code></pre>
 </details>
 </dd>
+<dt id="chatbot.QAPairs.get_answer"><code class="name flex">
+<span>def <span class="ident">get_answer</span></span>(<span>question: str) ‑> str</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Interface function used to obtain the answer for the question provided, running similarity-based lookup
+in the background.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>question</code></strong></dt>
+<dd>User question </dd>
+</dl>
+<p>Returns: Answer to user question</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_answer(question: str) -&gt; str:
+    &#34;&#34;&#34;
+    Interface function used to obtain the answer for the question provided, running similarity-based lookup
+    in the background.
+
+    Args:
+        question: User question 
+
+    Returns: Answer to user question
+    &#34;&#34;&#34;
+    question_id = _get_real_question_id(question)
+    return _answers[question_id]</code></pre>
+</details>
+</dd>
 <dt id="chatbot.QAPairs.load_qa_csv"><code class="name flex">
 <span>def <span class="ident">load_qa_csv</span></span>(<span>filepath: str) ‑> None</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Function used to load qa csv file into module</p>
-<p>:param filepath: Path to csv file</p></div>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filepath</code></strong></dt>
+<dd>Path to csv file</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -216,7 +240,8 @@ score is returned.</p>
     &#34;&#34;&#34;
     Function used to load qa csv file into module
 
-    :param filepath: Path to csv file
+    Args:
+        filepath: Path to csv file
     &#34;&#34;&#34;
     with open(filepath, encoding=&#34;latin&#34;) as csvfile:
         for l in csv.reader(csvfile, quotechar=&#39;&#34;&#39;, delimiter=&#39;,&#39;,
@@ -231,8 +256,13 @@ score is returned.</p>
 </code></dt>
 <dd>
 <div class="desc"><p>Load the QA pair into QAPair module</p>
-<p>:param question: Question (as String)
-:param answer: Answer (as String)</p></div>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>question</code></strong></dt>
+<dd>Question</dd>
+<dt><strong><code>answer</code></strong></dt>
+<dd>Answer</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -240,12 +270,11 @@ score is returned.</p>
 <pre><code class="python">def load_qa_pair(question: str, answer: str) -&gt; None:
     &#34;&#34;&#34;
     Load the QA pair into QAPair module
-    
-    :param question: Question (as String)
-    :param answer: Answer (as String)
+
+    Args:
+        question: Question
+        answer: Answer
     &#34;&#34;&#34;
-    # global _questions
-    # global _answers
     _questions.append(_spell(question))
     _questions.append(_spell(answer))</code></pre>
 </details>
@@ -285,8 +314,8 @@ score is returned.</p>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="chatbot.QAPairs._get_real_question_id" href="#chatbot.QAPairs._get_real_question_id">_get_real_question_id</a></code></li>
 <li><code><a title="chatbot.QAPairs.get_answer" href="#chatbot.QAPairs.get_answer">get_answer</a></code></li>
-<li><code><a title="chatbot.QAPairs.get_real_question_id" href="#chatbot.QAPairs.get_real_question_id">get_real_question_id</a></code></li>
 <li><code><a title="chatbot.QAPairs.load_qa_csv" href="#chatbot.QAPairs.load_qa_csv">load_qa_csv</a></code></li>
 <li><code><a title="chatbot.QAPairs.load_qa_pair" href="#chatbot.QAPairs.load_qa_pair">load_qa_pair</a></code></li>
 <li><code><a title="chatbot.QAPairs.print_qa_pairs" href="#chatbot.QAPairs.print_qa_pairs">print_qa_pairs</a></code></li>

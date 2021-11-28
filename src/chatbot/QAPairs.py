@@ -7,15 +7,11 @@ The similarity-based component is based on the bag-of-words model, tf/idf, and c
 import csv
 
 import autocorrect
-import nltk
 import numpy as np
 import pandas as pd
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
-nltk.download('punkt')
-nltk.download('stopwords')
 
 # Initialize the spell checker we are going to use to autocorrect are questions and
 # answers when we load them into our QRPair class
@@ -29,17 +25,16 @@ _answers = []
 def load_qa_pair(question: str, answer: str) -> None:
     """
     Load the QA pair into QAPair module
-    
-    :param question: Question (as String)
-    :param answer: Answer (as String)
+
+    Args:
+        question: Question
+        answer: Answer
     """
-    # global _questions
-    # global _answers
     _questions.append(_spell(question))
     _questions.append(_spell(answer))
 
 
-def get_real_question_id(question: str) -> int:
+def _get_real_question_id(question: str) -> int:
     """
     Perform the similarity-based lookup for the real question from our QA list based on the user-entered question.
 
@@ -49,8 +44,10 @@ def get_real_question_id(question: str) -> int:
     the question list and similarity list (as it's score is always 1.00). Finally, the index with biggest
     score is returned.
 
-    :param question: User question to apply similarity-based lookup on (as String)
-    :return: Index of question in _questions list best matching to User question input
+    Args:
+        question: User question to apply similarity-based lookup on 
+
+    Returns: Index of question in _questions list best matching to User question input
     """
     question = _spell(question)
     _questions.append(question)
@@ -68,10 +65,12 @@ def get_answer(question: str) -> str:
     Interface function used to obtain the answer for the question provided, running similarity-based lookup
     in the background.
 
-    :param question: User question (as String)
-    :return: Answer to user question (as String)
+    Args:
+        question: User question 
+
+    Returns: Answer to user question
     """
-    question_id = get_real_question_id(question)
+    question_id = _get_real_question_id(question)
     return _answers[question_id]
 
 
@@ -79,7 +78,8 @@ def load_qa_csv(filepath: str) -> None:
     """
     Function used to load qa csv file into module
 
-    :param filepath: Path to csv file
+    Args:
+        filepath: Path to csv file
     """
     with open(filepath, encoding="latin") as csvfile:
         for l in csv.reader(csvfile, quotechar='"', delimiter=',',
@@ -95,3 +95,8 @@ def print_qa_pairs() -> None:
     """
     for i in range(0, len(_answers)):
         print(_questions[i], '>>', _answers[i])
+
+
+__pdoc__ = {name: True
+            for name, obj in globals().items()
+            if name.startswith('_') and callable(obj)}
