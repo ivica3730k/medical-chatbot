@@ -80,7 +80,8 @@ def get_answer(question: str, confidence_threshold: float = 0.25) -> (bool, str)
         question: User question
         confidence_threshold: Confidence threshold for cosine-similarity. Used to exclude useless answer
 
-    Returns:Validity status ,answer to user question
+    Returns:
+        Validity status ,answer to user question
     """
     if not _questions:
         logging.critical("Trying to get answer without QA dataset loaded")
@@ -118,6 +119,7 @@ def print_qa_pairs() -> None:
         print(_questions[i], '>>', _answers[i])
 
 
+# Some code to make private members visible in documentation
 __pdoc__ = {name: True
             for name, obj in globals().items()
             if name.startswith('_') and callable(obj)}
