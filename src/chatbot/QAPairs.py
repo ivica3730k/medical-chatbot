@@ -5,6 +5,7 @@ The similarity-based component is based on the bag-of-words model, tf/idf, and c
 """
 
 import csv
+import logging
 
 import autocorrect
 import numpy as np
@@ -12,6 +13,8 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+
+logging.basicConfig(level=logging.INFO)  # change critical to info to display information
 
 # Initialize the spell checker we are going to use to autocorrect are questions and
 # answers when we load them into our QRPair class
@@ -30,11 +33,11 @@ def load_qa_pair(question: str, answer: str) -> None:
         question: Question
         answer: Answer
     """
-    _questions.append(_spell(question))
-    _questions.append(_spell(answer))
+    _questions.append(_spell(BeautifulSoup(question, "lxml").get_text(strip=True)).lower())
+    _answers.append((BeautifulSoup(answer, "lxml").get_text(strip=True)))
 
 
-def _get_real_question_id(question: str) -> int:
+def _get_real_question_id(question: str, confidence_threshold: float = 0.00) -> (bool, int):
     """
     Perform the similarity-based lookup for the real question from our QA list based on the user-entered question.
 
@@ -42,12 +45,14 @@ def _get_real_question_id(question: str) -> int:
     likely wanted to ask. User question is appended to the question list and sparse matrix is created and passed to the
     pandas data frame. Afterwards the cosine similarity is calculated using sklearn, our question is removed from
     the question list and similarity list (as it's score is always 1.00). Finally, the index with biggest
-    score is returned.
+    score is returned. Note, in order to exclude useless answers, the confidence threshold is applied.
 
     Args:
-        question: User question to apply similarity-based lookup on 
+        question: User question to apply similarity-based lookup on
+        confidence_threshold: Confidence threshold for cosine-similarity. Used to exclude useless answer
 
-    Returns: Index of question in _questions list best matching to User question input
+
+    Returns: Validity status, Index of question in _questions list best matching to User question input
     """
     question = _spell(question)
     _questions.append(question)
@@ -56,22 +61,40 @@ def _get_real_question_id(question: str) -> int:
     df = pd.DataFrame(doc_term_matrix)
     cs = cosine_similarity(df, df)[len(_questions) - 1]
     cs = np.delete(cs, -1)  # remove our question from the scores
+    if logging.INFO >= logging.root.level:
+        print(cs)
     _questions.pop()
-    return np.argmax(cs)
+    index = np.argmax(cs)
+    if cs[index] >= confidence_threshold:
+        return True, index
+    else:
+        return False, index
 
 
-def get_answer(question: str) -> str:
+def get_answer(question: str, confidence_threshold: float = 0.25) -> (bool, str):
     """
     Interface function used to obtain the answer for the question provided, running similarity-based lookup
     in the background.
 
     Args:
-        question: User question 
+        question: User question
+        confidence_threshold: Confidence threshold for cosine-similarity. Used to exclude useless answer
 
-    Returns: Answer to user question
+    Returns:Validity status ,answer to user question
     """
-    question_id = _get_real_question_id(question)
-    return _answers[question_id]
+    if not _questions:
+        logging.critical("Trying to get answer without QA dataset loaded")
+        return False, ""
+    question = question.lower()
+    question_corrected = _spell(question)
+    if question_corrected != question:
+        logging.info("Corrected {0} into {1}".format(question, question_corrected))
+        question = question_corrected
+    ok, question_id = _get_real_question_id(question, confidence_threshold)
+    if ok:
+        return True, _answers[question_id]
+    else:
+        return False, ""
 
 
 def load_qa_csv(filepath: str) -> None:
@@ -84,9 +107,7 @@ def load_qa_csv(filepath: str) -> None:
     with open(filepath, encoding="latin") as csvfile:
         for l in csv.reader(csvfile, quotechar='"', delimiter=',',
                             quoting=csv.QUOTE_ALL, skipinitialspace=True):
-            _questions.append(_spell(BeautifulSoup(l[0], "lxml").get_text(strip=True)))
-            # _answers.append(_spell(BeautifulSoup(l[1], "lxml").get_text(strip=True)))
-            _answers.append((BeautifulSoup(l[1], "lxml").get_text(strip=True)))
+            load_qa_pair(l[0], l[1])
 
 
 def print_qa_pairs() -> None:

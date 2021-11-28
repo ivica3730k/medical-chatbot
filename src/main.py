@@ -7,7 +7,11 @@ if __name__ == "__main__":
     while True:
         try:
             user_query = input(">>")
-            print(SimilarityBasedLookup.get_answer(user_query))
+            ok, answer = SimilarityBasedLookup.get_answer(user_query, confidence_threshold=0.125)
+            if ok:
+                print(answer)
+            else:
+                print("Sorry, answer to your question is not in my QA list")
         except:
             print("Bye")
             break
