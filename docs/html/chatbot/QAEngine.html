@@ -40,6 +40,7 @@ The similarity-based component is based on the bag-of-words model, tf/idf, and c
 
 import csv
 import logging
+from typing import Tuple
 
 import autocorrect
 import numpy as np
@@ -70,7 +71,7 @@ def load_qa_pair(question: str, answer: str) -&gt; None:
     _answers.append((BeautifulSoup(answer, &#34;lxml&#34;).get_text(strip=True)))
 
 
-def _get_real_question_id(question: str, confidence_threshold: float = 0.00) -&gt; (bool, int):
+def _get_real_question_id(question: str, confidence_threshold: float = 0.00) -&gt; Tuple[bool, int]:
     &#34;&#34;&#34;
     Perform the similarity-based lookup for the real question from our QA list based on the user-entered question.
 
@@ -104,7 +105,7 @@ def _get_real_question_id(question: str, confidence_threshold: float = 0.00) -&g
         return False, index
 
 
-def get_answer(question: str, confidence_threshold: float = 0.25) -&gt; (bool, str):
+def get_answer(question: str, confidence_threshold: float = 0.25) -&gt; Tuple[bool, str]:
     &#34;&#34;&#34;
     Interface function used to obtain the answer for the question provided, running similarity-based lookup
     in the background.
@@ -166,7 +167,7 @@ __pdoc__ = {name: True
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="chatbot.QAEngine._get_real_question_id"><code class="name flex">
-<span>def <span class="ident">_get_real_question_id</span></span>(<span>question: str, confidence_threshold: float = 0.0) ‑> (<class 'bool'>, <class 'int'>)</span>
+<span>def <span class="ident">_get_real_question_id</span></span>(<span>question: str, confidence_threshold: float = 0.0) ‑> Tuple[bool, int]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Perform the similarity-based lookup for the real question from our QA list based on the user-entered question.</p>
@@ -187,7 +188,7 @@ score is returned. Note, in order to exclude useless answers, the confidence thr
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def _get_real_question_id(question: str, confidence_threshold: float = 0.00) -&gt; (bool, int):
+<pre><code class="python">def _get_real_question_id(question: str, confidence_threshold: float = 0.00) -&gt; Tuple[bool, int]:
     &#34;&#34;&#34;
     Perform the similarity-based lookup for the real question from our QA list based on the user-entered question.
 
@@ -222,7 +223,7 @@ score is returned. Note, in order to exclude useless answers, the confidence thr
 </details>
 </dd>
 <dt id="chatbot.QAEngine.get_answer"><code class="name flex">
-<span>def <span class="ident">get_answer</span></span>(<span>question: str, confidence_threshold: float = 0.25) ‑> (<class 'bool'>, <class 'str'>)</span>
+<span>def <span class="ident">get_answer</span></span>(<span>question: str, confidence_threshold: float = 0.25) ‑> Tuple[bool, str]</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Interface function used to obtain the answer for the question provided, running similarity-based lookup
@@ -240,7 +241,7 @@ in the background.</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_answer(question: str, confidence_threshold: float = 0.25) -&gt; (bool, str):
+<pre><code class="python">def get_answer(question: str, confidence_threshold: float = 0.25) -&gt; Tuple[bool, str]:
     &#34;&#34;&#34;
     Interface function used to obtain the answer for the question provided, running similarity-based lookup
     in the background.

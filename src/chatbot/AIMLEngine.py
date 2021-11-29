@@ -1,13 +1,11 @@
-import logging
-
 import aiml
 import autocorrect
 
-logging.basicConfig(level=logging.INFO)  # change critical to info to display information
+# logging.basicConfig(level=logging.CRITICAL)  # change critical to info to display information
 # Initialize the spell checker we are going to use to autocorrect questions
 _spell = autocorrect.Speller("en")
-kern = aiml.Kernel()
-kern.setTextEncoding(None)
+_aiml_kernel = aiml.Kernel()
+_aiml_kernel.setTextEncoding(None)
 
 
 def load_aiml(filepath: str) -> None:
@@ -18,10 +16,10 @@ def load_aiml(filepath: str) -> None:
         filepath: Path to AIML file
 
     """
-    kern.bootstrap(learnFiles=filepath)
+    _aiml_kernel.bootstrap(learnFiles=filepath)
 
 
-def _get_response(query: str) -> str:
+def get_response(query: str) -> str:
     """
     Get the response from the AIML agent
 
@@ -37,7 +35,7 @@ def _get_response(query: str) -> str:
     # if query_corrected != query:
     #    logging.info("Corrected {0} into {1}".format(query, query_corrected))
     #    query = query_corrected
-    return kern.respond(query)
+    return _aiml_kernel.respond(query)
 
 
 # Some code to make private members visible in documentation

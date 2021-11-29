@@ -3,7 +3,7 @@
     <!-- Greetings and Politeness -->
     <category>
         <pattern>HELLO</pattern>
-        <template>Hello! How are you?</template>
+        <template>inaiml#Hello! How are you?</template>
     </category>
 
     <category>
@@ -29,36 +29,24 @@
 
     <category>
         <pattern>HOW ARE YOU</pattern>
-        <template>I'm functioning within normal parameters, thanks for asking.</template>
+        <template>inaiml#I'm functioning within normal parameters, thanks for asking.</template>
     </category>
 
     <category>
         <pattern>I AM FINE</pattern>
-        <template>That's good to know. What would you like to discuss about?</template>
+        <template>inaiml#That's good to know. What would you like to discuss about?</template>
     </category>
 
-    <category>
-        <pattern>BYE</pattern>
-        <template>#0$Bye! Nice talking to you. You take care now.</template>
-    </category>
-
-    <category>
-        <pattern>GOODBYE</pattern>
-        <template>
-            <srai>BYE</srai>
-        </template>
-    </category>
 
     <category>
         <pattern>EXIT</pattern>
-        <template>
-            <srai>BYE</srai>
+        <template>inaiml#BYE
         </template>
     </category>
 
     <category>
         <pattern>THANKS</pattern>
-        <template>You are welcome.</template>
+        <template>inaiml#You are welcome.</template>
     </category>
 
     <category>
@@ -70,12 +58,12 @@
 
     <category>
         <pattern>CHEERS</pattern>
-        <template>Sure mate.</template>
+        <template>inaiml#Sure mate.</template>
     </category>
 
     <category>
         <pattern>CHEERS *</pattern>
-        <template>Sure mate.</template>
+        <template>inaiml#Sure mate.</template>
     </category>
 
     <!-- Weather API
@@ -89,27 +77,28 @@
     <!--- Wikipedia API -->
     <category>
         <pattern>TELL ME ABOUT *</pattern>
-        <template>wikishort
+        <template>wikishort#
             <star index="1"/>
         </template>
     </category>
 
     <category>
         <pattern>TELL ME MORE ABOUT *</pattern>
-        <template>wikilong
+        <template>wikilong#
             <star index="1"/>
         </template>
     </category>
 
-
-    <category>
-        <pattern>WHAT IS *</pattern>
-        <template>
-            <srai>TELL ME ABOUT
-                <star/>
-            </srai>
-        </template>
-    </category>
+    <!--
+        <category>
+            <pattern>WHAT IS *</pattern>
+            <template>
+                <srai>TELL ME ABOUT
+                    <star/>
+                </srai>
+            </template>
+        </category>
+        -->
 
     <category>
         <pattern>MORE ABOUT *</pattern>
@@ -124,7 +113,7 @@
     <!-- Default reaction -->
     <category>
         <pattern>*</pattern>
-        <template>notinaiml
+        <template>notinaiml#
             <star index="1"/>
         </template>
     </category>

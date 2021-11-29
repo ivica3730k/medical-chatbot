@@ -6,6 +6,7 @@ The similarity-based component is based on the bag-of-words model, tf/idf, and c
 
 import csv
 import logging
+from typing import Tuple
 
 import autocorrect
 import numpy as np
@@ -14,7 +15,7 @@ from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-logging.basicConfig(level=logging.INFO)  # change critical to info to display information
+# logging.basicConfig(level=logging.CRITICAL)  # change critical to info to display information
 
 # Initialize the spell checker we are going to use to autocorrect questions
 _spell = autocorrect.Speller("en")
@@ -36,7 +37,7 @@ def load_qa_pair(question: str, answer: str) -> None:
     _answers.append((BeautifulSoup(answer, "lxml").get_text(strip=True)))
 
 
-def _get_real_question_id(question: str, confidence_threshold: float = 0.00) -> (bool, int):
+def _get_real_question_id(question: str, confidence_threshold: float = 0.00) -> Tuple[bool, int]:
     """
     Perform the similarity-based lookup for the real question from our QA list based on the user-entered question.
 
@@ -70,7 +71,7 @@ def _get_real_question_id(question: str, confidence_threshold: float = 0.00) -> 
         return False, index
 
 
-def get_answer(question: str, confidence_threshold: float = 0.25) -> (bool, str):
+def get_answer(question: str, confidence_threshold: float = 0.25) -> Tuple[bool, str]:
     """
     Interface function used to obtain the answer for the question provided, running similarity-based lookup
     in the background.
