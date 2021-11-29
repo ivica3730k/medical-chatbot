@@ -1,5 +1,3 @@
-# Similarity-based functionality is implemented in QAPairs module. Import it as SimilarityBasedLookup module
-
 import logging
 
 from chatbot import AIMLEngine as AIMLBasedLookup
