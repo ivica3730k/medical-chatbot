@@ -1,10 +1,20 @@
 import logging
+import sys
 
-from chatbot import AIMLEngine as AIMLBasedLookup
-from chatbot import QAEngine as SimilarityBasedLookup
-from chatbot import WikiApi
+from flask import Flask, render_template, request
+
+sys.path.append('..')
+import chatbot.AIMLEngine as AIMLBasedLookup
+import chatbot.QAEngine as SimilarityBasedLookup
+import chatbot.WikiApi as WikiApi
+
+# AIML Based lookup will use data from our xml file, load it in
+AIMLBasedLookup.load_aiml('../dataset/aiml_set.xml')
+# Similarity based lookup will use data from our csv file, load it in
+SimilarityBasedLookup.load_qa_csv('../dataset/thyroid-problems-qa.csv')
 
 logging.basicConfig(level=logging.CRITICAL)  # change critical to info to display information
+app = Flask(__name__)
 
 
 def get_answer(user_query):
@@ -43,14 +53,18 @@ def get_answer(user_query):
             return ("Sorry, please be more precise with your question")
 
 
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+
+@app.route("/process", methods=["POST"])
+def response():
+    msg = request.form["msg"]
+    # return(msg)
+    msg = get_answer(msg)
+    return msg
+
+
 if __name__ == "__main__":
-    # AIML Based lookup will use data from our xml file, load it in
-    AIMLBasedLookup.load_aiml('./dataset/aiml_set.xml')
-    # Similarity based lookup will use data from our csv file, load it in
-    SimilarityBasedLookup.load_qa_csv('./dataset/thyroid-problems-qa.csv')
-    while True:
-        try:
-            user_query = input(">>")
-            print(get_answer(user_query))
-        except:
-            break
+    app.run(port=8000)
