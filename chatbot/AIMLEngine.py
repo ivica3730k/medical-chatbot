@@ -1,3 +1,8 @@
+"""
+AIML engine module is used to perform the AIML based functionalities of the chat bot.
+The patters of the conversation are loaded in from pre-defined in an xml file.
+"""
+
 import aiml
 import autocorrect
 

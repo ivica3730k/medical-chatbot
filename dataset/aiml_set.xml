@@ -28,6 +28,21 @@
     </category>
 
     <category>
+        <pattern>HEY *</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+
+    <category>
+        <pattern>HEY</pattern>
+        <template>
+            <srai>HELLO</srai>
+        </template>
+    </category>
+
+
+    <category>
         <pattern>HOW ARE YOU</pattern>
         <template>inaiml#I'm functioning within normal parameters, thanks for asking.</template>
     </category>
@@ -66,13 +81,6 @@
         <template>inaiml#Sure mate.</template>
     </category>
 
-    <!-- Weather API
-    <category><pattern> WHAT IS THE WEATHER LIKE IN * </pattern>
-      <template>#2$<star/></template></category>
-
-    <category><pattern> HOW IS THE WEATHER IN * </pattern>
-      <template><srai>WHAT IS THE WEATHER LIKE IN <star/></srai></template></category>
-    -->
 
     <!--- Wikipedia API -->
     <category>

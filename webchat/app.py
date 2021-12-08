@@ -1,5 +1,8 @@
 import logging
+import os
 import sys
+
+dir_path = os.path.dirname(os.path.realpath(__file__)) + "/"
 
 from flask import Flask, render_template, request
 
@@ -63,7 +66,7 @@ def response():
 
 if __name__ == "__main__":
     # AIML Based lookup will use data from our xml file, load it in
-    AIMLBasedLookup.load_aiml('../dataset/aiml_set.xml')
+    AIMLBasedLookup.load_aiml(dir_path + '../dataset/aiml_set.xml')
     # Similarity based lookup will use data from our csv file, load it in
-    SimilarityBasedLookup.load_qa_csv('../dataset/thyroid-problems-qa.csv')
+    SimilarityBasedLookup.load_qa_csv(dir_path + '../dataset/thyroid-problems-qa.csv')
     app.run(port=8000)
