@@ -4,7 +4,8 @@ import sys
 
 dir_path = os.path.dirname(os.path.realpath(__file__)) + "/"
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
+from flask import jsonify
 
 sys.path.append('..')
 import chatbot.AIMLEngine as AIMLBasedLookup
@@ -13,6 +14,7 @@ import chatbot.WikiApi as WikiApi
 
 logging.basicConfig(level=logging.CRITICAL)  # change critical to info to display information
 app = Flask(__name__)
+# do the top level import if possible, required for heroku hosting
 try:
     AIMLBasedLookup.load_aiml(dir_path + '../dataset/aiml_set.xml')
     # Similarity based lookup will use data from our csv file, load it in
@@ -60,6 +62,15 @@ def get_answer(user_query):
 @app.route("/")
 def home():
     return render_template("index.html")
+
+
+@app.route('/docs/<path:filename>', methods=['GET', 'POST'])
+def index(filename):
+    filename = filename or 'index.html'
+    if request.method == 'GET':
+        return send_from_directory(dir_path + "../docs/html/chatbot", filename)
+
+    return jsonify(request.data)
 
 
 @app.route("/process", methods=["POST"])

@@ -175,28 +175,27 @@
         <span><i class="fas fa-cog"></i></span>
       </div>
     </header>
-
     <main class="msger-chat">
       <div class="msg left-msg">
-
         <div class="msg-bubble">
           <div class="msg-info">
             <div class="msg-info-name">Thyroid Bot</div>
             <div class="msg-info-time"></div>
           </div>
-
           <div class="msg-text">
             Hi, welcome to SimpleChat! Go ahead and send me a message. 😄
+            <br>
+            <br>
+            Check out documentation at: <a href="./docs/index.html">Docs</a>
+
           </div>
         </div>
       </div>
-
-
     </main>
 
     <form class="msger-inputarea">
-      <input type="text" class="msger-input" placeholder="Enter your message...">
-      <button type="submit" class="msger-send-btn">Send</button>
+      <input class="msger-input" placeholder="Enter your message..." type="text">
+      <button class="msger-send-btn" type="submit">Send</button>
     </form>
   </section>
   <script>
@@ -204,15 +203,6 @@
     const msgerInput = get(".msger-input");
     const msgerChat = get(".msger-chat");
 
-    const BOT_MSGS = [
-      "Hi, how are you?",
-      "Ohh... I can't understand what you trying to say. Sorry!",
-      "I like to play games... But I don't know how to play!",
-      "Sorry if my answers are not relevant. :))",
-      "I feel sleepy! :("
-    ];
-
-    // Icons made by Freepik from www.flaticon.com
     const BOT_NAME = "Thyroid Bot";
     const PERSON_NAME = "You";
 
@@ -223,13 +213,11 @@
       if (!msgText) return;
 
       appendMessage(PERSON_NAME, "right", msgText);
-      msgerInput.value = "";
       // console.log(msgText);
       botResponse(msgText);
     });
 
     function appendMessage(name, side, text) {
-      //   Simple solution for small apps
       const msgHTML = `
     <div class="msg ${side}-msg">
 
@@ -249,13 +237,9 @@
     }
 
     function botResponse(input) {
-
       // Sending and receiving data in JSON format using POST method
-      //
-
       var data = new FormData();
       data.append('msg', input);
-
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '/process', true);
       xhr.onload = function () {
@@ -268,8 +252,6 @@
       };
       xhr.send(data);
     }
-
-    // Utils
     function get(selector, root = document) {
       return root.querySelector(selector);
     }
@@ -280,8 +262,6 @@
 
       return `${h.slice(-2)}:${m.slice(-2)}`;
     }
-
-
 
   </script>
 </body>

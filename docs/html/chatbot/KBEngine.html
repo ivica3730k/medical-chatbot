@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>chatbot API documentation</title>
+<title>chatbot.KBEngine API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,37 +19,177 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Package <code>chatbot</code></h1>
+<h1 class="title">Module <code>chatbot.KBEngine</code></h1>
 </header>
 <section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">import pandas
+from nltk.inference import ResolutionProver
+from nltk.sem import Expression
+
+read_expr = Expression.fromstring
+_knowledge_base = []
+
+
+def load_knowledge_base(filepath: str) -&gt; None:
+    &#34;&#34;&#34;
+    Loads knowledge base from external csv file into the module
+    Args:
+        filepath: Path to the CSV KB file
+    &#34;&#34;&#34;
+    data = pandas.read_csv(filepath, header=None)
+    [_knowledge_base.append(read_expr(row)) for row in data[0]]
+
+
+def prove(subject: str, object: str) -&gt; str:
+    &#34;&#34;&#34;
+
+    Args:
+        subject:
+        object:
+
+    Returns:
+
+    &#34;&#34;&#34;
+    expr = read_expr(subject + &#39;(&#39; + object + &#39;)&#39;)
+    answer = ResolutionProver().prove(expr, _knowledge_base, verbose=True)
+    print(answer)
+    if answer:
+        return &#39;Correct.&#39;
+    else:
+        return &#39;It may not be true.&#39;
+
+# def add_negation(subject: str, object: str) -&gt; None:
+#     &#34;&#34;&#34;
+#     Adds negation to knowledge_base, not saving to csv file
+#
+#     Rick is not here.
+#     Args:
+#         subject: Term subject
+#         object: Term object
+#
+#     &#34;&#34;&#34;
+#     expr = read_expr(subject + &#39;(-&#39; + object + &#39;)&#39;)
+#     # &gt;&gt;&gt; ADD SOME CODES HERE to make sure expr does not contradict
+#     # with the KB before appending, otherwise show an error message.
+#     _knowledge_base.append(expr)
+#
+#
+# def add_conjunction(subject: str, object: str) -&gt; None:
+#     &#34;&#34;&#34;
+#     Adds conjunction to knowledge_base, not saving to csv file
+#
+#     She usually eats at home, because she likes cooking.
+#     Args:
+#         subject: Term subject
+#         object: Term object
+#
+#     &#34;&#34;&#34;
+#     expr = read_expr(&#39;-&#39; + subject + &#39;(&#39; + object + &#39;)&#39;)
+#     # &gt;&gt;&gt; ADD SOME CODES HERE to make sure expr does not contradict
+#     # with the KB before appending, otherwise show an error message.
+#     _knowledge_base.append(expr)
+#
+#
+# def add_disjunction(subject: str, object: str) -&gt; None:
+#     &#34;&#34;&#34;
+#     Adds disjunction to knowledge_base, not saving to csv file
+#
+#
+#     Args:
+#         subject: Term subject
+#         object: Term object
+#
+#     &#34;&#34;&#34;
+#     expr = read_expr(subject + &#39;(&#39; + object + &#39;)&#39;)
+#     # &gt;&gt;&gt; ADD SOME CODES HERE to make sure expr does not contradict
+#     # with the KB before appending, otherwise show an error message.
+#     _knowledge_base.append(expr)
+#
+#
+# def add_implication(subject: str, object: str) -&gt; None:
+#     &#34;&#34;&#34;
+#     Adds implication to knowledge_base, not saving to csv file
+#
+#     Tim is british
+#     Args:
+#         subject: Term subject
+#         object: Term object
+#
+#     &#34;&#34;&#34;
+#     expr = read_expr(&#39;-&gt;&#39; + subject + &#39;(&#39; + object + &#39;)&#39;)
+#     # &gt;&gt;&gt; ADD SOME CODES HERE to make sure expr does not contradict
+#     # with the KB before appending, otherwise show an error message.
+#     _knowledge_base.append(expr)
+#</code></pre>
+</details>
 </section>
 <section>
-<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt><code class="name"><a title="chatbot.AIMLEngine" href="AIMLEngine.html">chatbot.AIMLEngine</a></code></dt>
+<dt id="chatbot.KBEngine.load_knowledge_base"><code class="name flex">
+<span>def <span class="ident">load_knowledge_base</span></span>(<span>filepath: str) ‑> None</span>
+</code></dt>
 <dd>
-<div class="desc"><p>AIML engine module is used to perform the AIML based functionalities of the chat bot.
-The patters of the conversation are loaded in from pre-defined …</p></div>
+<div class="desc"><p>Loads knowledge base from external csv file into the module</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>filepath</code></strong></dt>
+<dd>Path to the CSV KB file</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def load_knowledge_base(filepath: str) -&gt; None:
+    &#34;&#34;&#34;
+    Loads knowledge base from external csv file into the module
+    Args:
+        filepath: Path to the CSV KB file
+    &#34;&#34;&#34;
+    data = pandas.read_csv(filepath, header=None)
+    [_knowledge_base.append(read_expr(row)) for row in data[0]]</code></pre>
+</details>
 </dd>
-<dt><code class="name"><a title="chatbot.KBEngine" href="KBEngine.html">chatbot.KBEngine</a></code></dt>
+<dt id="chatbot.KBEngine.prove"><code class="name flex">
+<span>def <span class="ident">prove</span></span>(<span>subject: str, object: str) ‑> str</span>
+</code></dt>
 <dd>
-<div class="desc"></div>
-</dd>
-<dt><code class="name"><a title="chatbot.QAEngine" href="QAEngine.html">chatbot.QAEngine</a></code></dt>
-<dd>
-<div class="desc"><p>QAPair module used to perform similarity-based question lookup to provide the user with the best possible answer.
-The similarity-based
-functionality …</p></div>
-</dd>
-<dt><code class="name"><a title="chatbot.WikiApi" href="WikiApi.html">chatbot.WikiApi</a></code></dt>
-<dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="args">Args</h2>
+<p>subject:
+object:
+Returns:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def prove(subject: str, object: str) -&gt; str:
+    &#34;&#34;&#34;
+
+    Args:
+        subject:
+        object:
+
+    Returns:
+
+    &#34;&#34;&#34;
+    expr = read_expr(subject + &#39;(&#39; + object + &#39;)&#39;)
+    answer = ResolutionProver().prove(expr, _knowledge_base, verbose=True)
+    print(answer)
+    if answer:
+        return &#39;Correct.&#39;
+    else:
+        return &#39;It may not be true.&#39;</code></pre>
+</details>
 </dd>
 </dl>
-</section>
-<section>
-</section>
-<section>
 </section>
 <section>
 </section>
@@ -60,12 +200,15 @@ functionality …</p></div>
 <ul></ul>
 </div>
 <ul id="index">
-<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<li><h3>Super-module</h3>
 <ul>
-<li><code><a title="chatbot.AIMLEngine" href="AIMLEngine.html">chatbot.AIMLEngine</a></code></li>
-<li><code><a title="chatbot.KBEngine" href="KBEngine.html">chatbot.KBEngine</a></code></li>
-<li><code><a title="chatbot.QAEngine" href="QAEngine.html">chatbot.QAEngine</a></code></li>
-<li><code><a title="chatbot.WikiApi" href="WikiApi.html">chatbot.WikiApi</a></code></li>
+<li><code><a title="chatbot" href="index.html">chatbot</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-functions">Functions</a></h3>
+<ul class="">
+<li><code><a title="chatbot.KBEngine.load_knowledge_base" href="#chatbot.KBEngine.load_knowledge_base">load_knowledge_base</a></code></li>
+<li><code><a title="chatbot.KBEngine.prove" href="#chatbot.KBEngine.prove">prove</a></code></li>
 </ul>
 </li>
 </ul>
