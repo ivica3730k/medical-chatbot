@@ -13,6 +13,12 @@ import chatbot.WikiApi as WikiApi
 
 logging.basicConfig(level=logging.CRITICAL)  # change critical to info to display information
 app = Flask(__name__)
+try:
+    AIMLBasedLookup.load_aiml(dir_path + '../dataset/aiml_set.xml')
+    # Similarity based lookup will use data from our csv file, load it in
+    SimilarityBasedLookup.load_qa_csv(dir_path + '../dataset/thyroid-problems-qa.csv')
+except:
+    pass
 
 
 def get_answer(user_query):
@@ -69,4 +75,5 @@ if __name__ == "__main__":
     AIMLBasedLookup.load_aiml(dir_path + '../dataset/aiml_set.xml')
     # Similarity based lookup will use data from our csv file, load it in
     SimilarityBasedLookup.load_qa_csv(dir_path + '../dataset/thyroid-problems-qa.csv')
-    app.run(port=8000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(port=port, host='0.0.0.0', debug=True)
