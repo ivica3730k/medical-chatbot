@@ -183,7 +183,7 @@
             <div class="msg-info-time"></div>
           </div>
           <div class="msg-text">
-            Hi, welcome to SimpleChat! Go ahead and send me a message. 😄
+            Hi, welcome to Thyroid Chat Bot! Go ahead and send me a message. 😄
             <br>
             <br>
             Check out documentation at: <a href="./docs/index.html">Docs</a>
@@ -194,7 +194,7 @@
     </main>
 
     <form class="msger-inputarea">
-      <input class="msger-input" placeholder="Enter your message..." type="text">
+      <input class="msger-input" placeholder="Enter your message..." type="text" id="textInput">
       <button class="msger-send-btn" type="submit">Send</button>
     </form>
   </section>
@@ -215,6 +215,7 @@
       appendMessage(PERSON_NAME, "right", msgText);
       // console.log(msgText);
       botResponse(msgText);
+      document.getElementById("textInput").value = "";
     });
 
     function appendMessage(name, side, text) {

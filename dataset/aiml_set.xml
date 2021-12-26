@@ -97,17 +97,6 @@
         </template>
     </category>
 
-    <!--
-        <category>
-            <pattern>WHAT IS *</pattern>
-            <template>
-                <srai>TELL ME ABOUT
-                    <star/>
-                </srai>
-            </template>
-        </category>
-        -->
-
     <category>
         <pattern>MORE ABOUT *</pattern>
         <template>
@@ -117,7 +106,42 @@
         </template>
     </category>
 
+    <!-- Reactions for KB engine -->
+    <category>
+        <pattern>* PRODUCES *</pattern>
+        <template>
+            <star index="1"/>
+            #PRODUCES#
+            <star index="2"/>
+        </template>
+    </category>
 
+    <category>
+        <pattern>* CAUSES *</pattern>
+        <template>
+            <star index="1"/>
+            #CAUSES#
+            <star index="2"/>
+        </template>
+    </category>
+
+    <category>
+        <pattern>* INCLUDE *</pattern>
+        <template>
+            <star index="1"/>
+            #INCLUDE#
+            <star index="2"/>
+        </template>
+    </category>
+
+    <category>
+        <pattern>* HELPS *</pattern>
+        <template>
+            <star index="1"/>
+            #HELPS#
+            <star index="2"/>
+        </template>
+    </category>
     <!-- Default reaction -->
     <category>
         <pattern>*</pattern>

@@ -1,6 +1,7 @@
 import logging
 
 from chatbot import AIMLEngine as AIMLBasedLookup
+from chatbot import KBEngine as KnowledgeBasedLookup
 from chatbot import QAEngine as SimilarityBasedLookup
 from chatbot import WikiApi
 
@@ -35,6 +36,12 @@ def get_answer(user_query):
                 return ("Weren't able to find your term on Wikipedia nor our QA dataset, please try to rephrase")
         else:
             return (wikipedia_answer)
+    if aiml_answer.split("#")[1] in ("PRODUCES", "CAUSES", "INCLUDE", "HELPS"):
+        a = aiml_answer.split("#")[1].lower()
+        b = aiml_answer.split("#")[0].lower()
+        c = aiml_answer.split("#")[2].lower()
+        validity = KnowledgeBasedLookup.prove_statement(a, b, c)
+        return str(validity)
     if aiml_answer.split("#")[0] == "notinaiml":  # if answer is not in aiml use Similarity based lookup
         ok, similarity_answer = SimilarityBasedLookup.get_answer(user_query, confidence_threshold=0.25)
         if ok:
@@ -48,6 +55,8 @@ if __name__ == "__main__":
     AIMLBasedLookup.load_aiml('./dataset/aiml_set.xml')
     # Similarity based lookup will use data from our csv file, load it in
     SimilarityBasedLookup.load_qa_csv('./dataset/thyroid-problems-qa.csv')
+    # Knowledge based lookup will use data from our KB txt file, load it in
+    KnowledgeBasedLookup.load_knowledge_base('./dataset/kb_set.txt')
     while True:
         try:
             user_query = input(">>")

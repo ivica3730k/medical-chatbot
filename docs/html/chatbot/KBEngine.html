@@ -26,8 +26,7 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import pandas
-from nltk.inference import ResolutionProver
+<pre><code class="python">from nltk.inference import ResolutionProver
 from nltk.sem import Expression
 
 read_expr = Expression.fromstring
@@ -36,31 +35,31 @@ _knowledge_base = []
 
 def load_knowledge_base(filepath: str) -&gt; None:
     &#34;&#34;&#34;
-    Loads knowledge base from external csv file into the module
+    Loads knowledge base from external txt file into the module
     Args:
-        filepath: Path to the CSV KB file
+        filepath: Path to the txt KB file
     &#34;&#34;&#34;
-    data = pandas.read_csv(filepath, header=None)
-    [_knowledge_base.append(read_expr(row)) for row in data[0]]
+    file = open(filepath, &#34;r&#34;)
+    lines = file.readlines()
+    [_knowledge_base.append(read_expr(row)) for row in lines]
 
 
-def prove(subject: str, object: str) -&gt; str:
+def prove_statement(a: str, b: str, c: str) -&gt; bool:
     &#34;&#34;&#34;
+    Prove statement using NLTK Inference Resolution Prover
 
+    Format for proving &gt; a(b,c)
     Args:
-        subject:
-        object:
+        a: Word
+        b: Word
+        c: Word
 
     Returns:
-
+        Validity of statement
     &#34;&#34;&#34;
-    expr = read_expr(subject + &#39;(&#39; + object + &#39;)&#39;)
-    answer = ResolutionProver().prove(expr, _knowledge_base, verbose=True)
-    print(answer)
-    if answer:
-        return &#39;Correct.&#39;
-    else:
-        return &#39;It may not be true.&#39;
+    expr = read_expr(a + &#39;(&#39; + b + &#39;,&#39; + c + &#39;)&#39;)
+    answer_validity = ResolutionProver().prove(expr, _knowledge_base, verbose=False)
+    return answer_validity
 
 # def add_negation(subject: str, object: str) -&gt; None:
 #     &#34;&#34;&#34;
@@ -138,11 +137,11 @@ def prove(subject: str, object: str) -&gt; str:
 <span>def <span class="ident">load_knowledge_base</span></span>(<span>filepath: str) ‑> None</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Loads knowledge base from external csv file into the module</p>
+<div class="desc"><p>Loads knowledge base from external txt file into the module</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>filepath</code></strong></dt>
-<dd>Path to the CSV KB file</dd>
+<dd>Path to the txt KB file</dd>
 </dl></div>
 <details class="source">
 <summary>
@@ -150,43 +149,52 @@ def prove(subject: str, object: str) -&gt; str:
 </summary>
 <pre><code class="python">def load_knowledge_base(filepath: str) -&gt; None:
     &#34;&#34;&#34;
-    Loads knowledge base from external csv file into the module
+    Loads knowledge base from external txt file into the module
     Args:
-        filepath: Path to the CSV KB file
+        filepath: Path to the txt KB file
     &#34;&#34;&#34;
-    data = pandas.read_csv(filepath, header=None)
-    [_knowledge_base.append(read_expr(row)) for row in data[0]]</code></pre>
+    file = open(filepath, &#34;r&#34;)
+    lines = file.readlines()
+    [_knowledge_base.append(read_expr(row)) for row in lines]</code></pre>
 </details>
 </dd>
-<dt id="chatbot.KBEngine.prove"><code class="name flex">
-<span>def <span class="ident">prove</span></span>(<span>subject: str, object: str) ‑> str</span>
+<dt id="chatbot.KBEngine.prove_statement"><code class="name flex">
+<span>def <span class="ident">prove_statement</span></span>(<span>a: str, b: str, c: str) ‑> bool</span>
 </code></dt>
 <dd>
-<div class="desc"><h2 id="args">Args</h2>
-<p>subject:
-object:
-Returns:</p></div>
+<div class="desc"><p>Prove statement using NLTK Inference Resolution Prover</p>
+<p>Format for proving &gt; a(b,c)</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>a</code></strong></dt>
+<dd>Word</dd>
+<dt><strong><code>b</code></strong></dt>
+<dd>Word</dd>
+<dt><strong><code>c</code></strong></dt>
+<dd>Word</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<p>Validity of statement</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def prove(subject: str, object: str) -&gt; str:
+<pre><code class="python">def prove_statement(a: str, b: str, c: str) -&gt; bool:
     &#34;&#34;&#34;
+    Prove statement using NLTK Inference Resolution Prover
 
+    Format for proving &gt; a(b,c)
     Args:
-        subject:
-        object:
+        a: Word
+        b: Word
+        c: Word
 
     Returns:
-
+        Validity of statement
     &#34;&#34;&#34;
-    expr = read_expr(subject + &#39;(&#39; + object + &#39;)&#39;)
-    answer = ResolutionProver().prove(expr, _knowledge_base, verbose=True)
-    print(answer)
-    if answer:
-        return &#39;Correct.&#39;
-    else:
-        return &#39;It may not be true.&#39;</code></pre>
+    expr = read_expr(a + &#39;(&#39; + b + &#39;,&#39; + c + &#39;)&#39;)
+    answer_validity = ResolutionProver().prove(expr, _knowledge_base, verbose=False)
+    return answer_validity</code></pre>
 </details>
 </dd>
 </dl>
@@ -208,7 +216,7 @@ Returns:</p></div>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
 <li><code><a title="chatbot.KBEngine.load_knowledge_base" href="#chatbot.KBEngine.load_knowledge_base">load_knowledge_base</a></code></li>
-<li><code><a title="chatbot.KBEngine.prove" href="#chatbot.KBEngine.prove">prove</a></code></li>
+<li><code><a title="chatbot.KBEngine.prove_statement" href="#chatbot.KBEngine.prove_statement">prove_statement</a></code></li>
 </ul>
 </li>
 </ul>

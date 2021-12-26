@@ -11,14 +11,18 @@ sys.path.append('..')
 import chatbot.AIMLEngine as AIMLBasedLookup
 import chatbot.QAEngine as SimilarityBasedLookup
 import chatbot.WikiApi as WikiApi
+import chatbot.KBEngine as KnowledgeBasedLookup
 
 logging.basicConfig(level=logging.CRITICAL)  # change critical to info to display information
 app = Flask(__name__)
 # do the top level import if possible, required for heroku hosting
 try:
+    # AIML Based lookup will use data from our xml file, load it in
     AIMLBasedLookup.load_aiml(dir_path + '../dataset/aiml_set.xml')
     # Similarity based lookup will use data from our csv file, load it in
     SimilarityBasedLookup.load_qa_csv(dir_path + '../dataset/thyroid-problems-qa.csv')
+    # Knowledge based lookup will use data from our KB txt file, load it in
+    KnowledgeBasedLookup.load_knowledge_base(dir_path + '../dataset/kb_set.txt')
 except:
     pass
 
@@ -51,6 +55,12 @@ def get_answer(user_query):
                 return ("Weren't able to find your term on Wikipedia nor our QA dataset, please try to rephrase")
         else:
             return (wikipedia_answer)
+    if aiml_answer.split("#")[1] in ("PRODUCES", "CAUSES", "INCLUDE", "HELPS"):
+        a = aiml_answer.split("#")[1].lower()
+        b = aiml_answer.split("#")[0].lower()
+        c = aiml_answer.split("#")[2].lower()
+        validity = KnowledgeBasedLookup.prove_statement(a, b, c)
+        return str(validity)
     if aiml_answer.split("#")[0] == "notinaiml":  # if answer is not in aiml use Similarity based lookup
         ok, similarity_answer = SimilarityBasedLookup.get_answer(user_query, confidence_threshold=0.25)
         if ok:
@@ -86,5 +96,7 @@ if __name__ == "__main__":
     AIMLBasedLookup.load_aiml(dir_path + '../dataset/aiml_set.xml')
     # Similarity based lookup will use data from our csv file, load it in
     SimilarityBasedLookup.load_qa_csv(dir_path + '../dataset/thyroid-problems-qa.csv')
+    # Knowledge based lookup will use data from our KB txt file, load it in
+    KnowledgeBasedLookup.load_knowledge_base(dir_path + '../dataset/kb_set.txt')
     port = int(os.environ.get("PORT", 5000))
     app.run(port=port, host='0.0.0.0', debug=True)
