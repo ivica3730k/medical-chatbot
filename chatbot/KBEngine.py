@@ -1,3 +1,8 @@
+"""
+The KBEngine module is used to provide the logical reasoning capabilities with the help of the NLTK library.
+Initial logic is loaded into the chatbot from the Knowledge base txt file.
+"""
+
 from nltk.inference import ResolutionProver
 from nltk.sem import Expression
 

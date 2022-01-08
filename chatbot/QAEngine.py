@@ -1,5 +1,6 @@
 """
-QAPair module used to perform similarity-based question lookup to provide the user with the best possible answer.
+The QAEngine module is used to perform similarity-based question lookup to provide the user with
+the best possible answer.
 The similarity-based  functionality is based on a set of pre-defined Q/As in a CSV file.
 The similarity-based component is based on the bag-of-words model, tf/idf, and cosine similarity.
 """
