@@ -3,7 +3,17 @@
     <!-- Greetings and Politeness -->
     <category>
         <pattern>HELLO</pattern>
-        <template>inaiml#Hello! How are you?</template>
+        <template>
+            <random>
+                <li>inaiml#Hello! How are you?
+                </li>
+                <li>inaiml#Hi</li>
+                <li>inaiml#Hi there</li>
+                <li>inaiml#Hello</li>
+                <li>inaiml#Hi :)</li>
+                <li>inaiml#Hi :)</li>
+            </random>
+        </template>
     </category>
 
     <category>
