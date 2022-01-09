@@ -1,4 +1,5 @@
 produces (thyroid,hormones)
+causes (problems, disorders)
 helps (coffee, thyroid)
 include (issues, hypothyroidism)
 include (issues, hyperthyroidism)

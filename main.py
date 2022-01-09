@@ -5,7 +5,7 @@ from chatbot import KBEngine as KnowledgeBasedLookup
 from chatbot import QAEngine as SimilarityBasedLookup
 from get_answer import get_answer
 
-logging.basicConfig(level=logging.CRITICAL)  # change critical to info to display information
+logging.basicConfig(level=logging.INFO)  # change critical to info to display information
 
 if __name__ == "__main__":
     # AIML Based lookup will use data from our xml file, load it in

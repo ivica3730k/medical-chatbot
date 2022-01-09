@@ -67,71 +67,7 @@ def prove_statement(a: str, b: str, c: str) -&gt; bool:
     &#34;&#34;&#34;
     expr = read_expr(a + &#39;(&#39; + b + &#39;,&#39; + c + &#39;)&#39;)
     answer_validity = ResolutionProver().prove(expr, _knowledge_base, verbose=False)
-    return answer_validity
-
-# def add_negation(subject: str, object: str) -&gt; None:
-#     &#34;&#34;&#34;
-#     Adds negation to knowledge_base, not saving to csv file
-#
-#     Rick is not here.
-#     Args:
-#         subject: Term subject
-#         object: Term object
-#
-#     &#34;&#34;&#34;
-#     expr = read_expr(subject + &#39;(-&#39; + object + &#39;)&#39;)
-#     # &gt;&gt;&gt; ADD SOME CODES HERE to make sure expr does not contradict
-#     # with the KB before appending, otherwise show an error message.
-#     _knowledge_base.append(expr)
-#
-#
-# def add_conjunction(subject: str, object: str) -&gt; None:
-#     &#34;&#34;&#34;
-#     Adds conjunction to knowledge_base, not saving to csv file
-#
-#     She usually eats at home, because she likes cooking.
-#     Args:
-#         subject: Term subject
-#         object: Term object
-#
-#     &#34;&#34;&#34;
-#     expr = read_expr(&#39;-&#39; + subject + &#39;(&#39; + object + &#39;)&#39;)
-#     # &gt;&gt;&gt; ADD SOME CODES HERE to make sure expr does not contradict
-#     # with the KB before appending, otherwise show an error message.
-#     _knowledge_base.append(expr)
-#
-#
-# def add_disjunction(subject: str, object: str) -&gt; None:
-#     &#34;&#34;&#34;
-#     Adds disjunction to knowledge_base, not saving to csv file
-#
-#
-#     Args:
-#         subject: Term subject
-#         object: Term object
-#
-#     &#34;&#34;&#34;
-#     expr = read_expr(subject + &#39;(&#39; + object + &#39;)&#39;)
-#     # &gt;&gt;&gt; ADD SOME CODES HERE to make sure expr does not contradict
-#     # with the KB before appending, otherwise show an error message.
-#     _knowledge_base.append(expr)
-#
-#
-# def add_implication(subject: str, object: str) -&gt; None:
-#     &#34;&#34;&#34;
-#     Adds implication to knowledge_base, not saving to csv file
-#
-#     Tim is british
-#     Args:
-#         subject: Term subject
-#         object: Term object
-#
-#     &#34;&#34;&#34;
-#     expr = read_expr(&#39;-&gt;&#39; + subject + &#39;(&#39; + object + &#39;)&#39;)
-#     # &gt;&gt;&gt; ADD SOME CODES HERE to make sure expr does not contradict
-#     # with the KB before appending, otherwise show an error message.
-#     _knowledge_base.append(expr)
-#</code></pre>
+    return answer_validity</code></pre>
 </details>
 </section>
 <section>
