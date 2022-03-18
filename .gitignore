@@ -126,3 +126,7 @@ dmypy.json
 .idea/
 
 tex2pdf.-85b5126f35f3b5aa/input.aux
+
+*.h5
+
+*.pt

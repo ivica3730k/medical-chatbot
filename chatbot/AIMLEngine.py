@@ -3,8 +3,6 @@ AIML engine module is used to perform the AIML based functionalities of the chat
 The patters of the conversation are loaded in from pre-defined in an xml file.
 """
 
-import logging
-
 import aiml
 import autocorrect
 
@@ -37,11 +35,11 @@ def get_response(query: str) -> str:
 
     """
     # Still not sure on shall autocorrect should be used here
-    query = query.lower()
-    query_corrected = _spell(query)
-    if query_corrected != query:
-        logging.info("Corrected {0} into {1}".format(query, query_corrected))
-        query = query_corrected
+    # query = query.lower()
+    # query_corrected = _spell(query)
+    # if query_corrected != query:
+    #    logging.info("Corrected {0} into {1}".format(query, query_corrected))
+    #    query = query_corrected
     return _aiml_kernel.respond(query)
 
 

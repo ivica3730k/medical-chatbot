@@ -152,6 +152,21 @@
             <star index="2"/>
         </template>
     </category>
+    <!-- Image classification reactions -->
+    <category>
+        <pattern>DIAGNOSE *</pattern>
+        <template>diagnose#
+            <star index="1"/>
+        </template>
+    </category>
+
+    <!-- Object detection reactions -->
+    <category>
+        <pattern>OBJECT DETECTION *</pattern>
+        <template>objectdetection#
+            <star index="1"/>
+        </template>
+    </category>
     <!-- Default reaction -->
     <category>
         <pattern>*</pattern>

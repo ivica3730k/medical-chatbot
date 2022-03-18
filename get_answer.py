@@ -1,7 +1,9 @@
 from chatbot import AIMLEngine as AIMLBasedLookup
+from chatbot import ClassificationEngine as ImageClassificationLookup
 from chatbot import KBEngine as KnowledgeBasedLookup
 from chatbot import QAEngine as SimilarityBasedLookup
 from chatbot import WikiApi
+from chatbot.yolov5 import ObjectDetection as ObjectDetection
 
 
 def get_answer(user_query):
@@ -38,6 +40,21 @@ def get_answer(user_query):
         c = aiml_answer.split("#")[2].lower()
         validity = KnowledgeBasedLookup.prove_statement(a, b, c)
         return str(validity)
+    if aiml_answer.split("#")[0] == "diagnose":
+        fixed_filename = aiml_answer.split("#")[1].replace("Z2IKzn", ".")
+        fixed_filename = fixed_filename.replace(" ", "")
+        try:
+            class_label, score = ImageClassificationLookup.classify_from_file(fixed_filename)
+            return "Image provided represent a sample of " + class_label + " x-ray image, determined with " + str(round(
+                score * 100.0, 2)) + " % certainty."
+        except:
+            return "Sorry, I was not able to find your file"
+    if aiml_answer.split("#")[0] == "objectdetection":
+        fixed_filename = aiml_answer.split("#")[1].replace("Z2IKzn", ".")
+        fixed_filename = fixed_filename.replace(" ", "")
+        print("Here")
+        ObjectDetection.inference_from_file(fixed_filename)
+        return "Opening inference results"
     if aiml_answer.split("#")[0] == "notinaiml":  # if answer is not in aiml use Similarity based lookup
         ok, similarity_answer = SimilarityBasedLookup.get_answer(user_query, confidence_threshold=0.25)
         if ok:
