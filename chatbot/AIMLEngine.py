@@ -3,9 +3,10 @@ AIML engine module is used to perform the AIML based functionalities of the chat
 The patters of the conversation are loaded in from pre-defined in an xml file.
 """
 
+import logging
+
 import aiml
 import autocorrect
-import logging
 
 # logging.basicConfig(level=logging.CRITICAL)  # change critical to info to display information
 # Initialize the spell checker we are going to use to autocorrect questions
