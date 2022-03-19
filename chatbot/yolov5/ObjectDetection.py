@@ -16,7 +16,6 @@ _detection_network = None
 _classes = []
 
 
-
 class ObjectDetection:
     def __init__(self, model_path, input_width=320, conf_threshold=0.25, iou_thres=0.45):
         self.yolo_model = attempt_load(weights=model_path, map_location=device)
@@ -61,7 +60,6 @@ class ObjectDetection:
 
 
 def load_network(model_path, input_width=320, conf_threshold=0.25, iou_thres=0.45, classes=[]):
-    print("Loading network")
     global _detection_network
     global _classes
     _detection_network = ObjectDetection(model_path, input_width, conf_threshold, iou_thres)
@@ -69,15 +67,12 @@ def load_network(model_path, input_width=320, conf_threshold=0.25, iou_thres=0.4
 
 
 def _inference_frame(img):
-    print("Attempting inference")
     assert _detection_network is not None, "You first need to load in your neural network via load_network()"
-    print("Iferecing")
     items = _detection_network.detect(img)
     return items
 
 
 def _draw_on_frame(frame, items):
-    print("Drawing on frame")
     for obj in items:
         label = obj['label']
         if _classes:
@@ -91,12 +86,25 @@ def _draw_on_frame(frame, items):
 
 
 def inference_from_file(img_path):
-    print("Reading photo")
     img = cv2.imread(img_path)
-    cv2.imshow("Inference results", img)
-    cv2.waitKey(0)
     items = _inference_frame(img)
-    print(items)
     img = _draw_on_frame(img, items)
     cv2.imshow("Inference results", img)
     cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+
+def inference_on_camera(camera="/dev/video0"):
+    camera = cv2.VideoCapture(camera)
+
+    while True:
+        ok, frame = camera.read()
+        if not ok:
+            break
+        objs = _inference_frame(frame)
+        frame = _draw_on_frame(frame, objs)
+        cv2.imshow("Result", frame)
+        key = cv2.waitKey(20)
+        if key == ord('a'):
+            cv2.destroyAllWindows()
+            break

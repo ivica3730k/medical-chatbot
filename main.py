@@ -4,8 +4,8 @@ from chatbot import AIMLEngine as AIMLBasedLookup
 from chatbot import ClassificationEngine as ImageClassificationLookup
 from chatbot import KBEngine as KnowledgeBasedLookup
 from chatbot import QAEngine as SimilarityBasedLookup
-from get_answer import get_answer
 from chatbot.yolov5 import ObjectDetection as ObjectDetection
+from get_answer import get_answer
 
 logging.basicConfig(level=logging.CRITICAL)  # change critical to info to display information
 
@@ -19,7 +19,7 @@ if __name__ == "__main__":
     # Load in our image classification model
     ImageClassificationLookup.load_model('./dataset/model.h5', classes=["Normal", "Pneumonia"])
     # Load in yolov5 neural network for general object detection
-    ObjectDetection.load_network('yolov5n.pt', input_width=640)
+    ObjectDetection.load_network('yolov5n.pt', input_width=640, iou_thres=0.5, conf_threshold=0.25)
     while True:
         try:
             user_query = input(">>")

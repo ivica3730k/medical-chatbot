@@ -162,11 +162,20 @@
 
     <!-- Object detection reactions -->
     <category>
-        <pattern>OBJECT DETECTION *</pattern>
-        <template>objectdetection#
+        <pattern>OBJECT DETECTION ON PHOTO *</pattern>
+        <template>objectdetectiononphoto#
             <star index="1"/>
         </template>
     </category>
+
+    <category>
+        <pattern>OBJECT DETECTION ON CAMERA *</pattern>
+        <template>objectdetectiononcamera#
+            <star index="1"/>
+        </template>
+    </category>
+
+
     <!-- Default reaction -->
     <category>
         <pattern>*</pattern>

@@ -41,20 +41,31 @@ def get_answer(user_query):
         validity = KnowledgeBasedLookup.prove_statement(a, b, c)
         return str(validity)
     if aiml_answer.split("#")[0] == "diagnose":
-        fixed_filename = aiml_answer.split("#")[1].replace("Z2IKzn", ".")
-        fixed_filename = fixed_filename.replace(" ", "")
+        fixed_arg = aiml_answer.split("#")[1].replace("Z2IKzn", ".")
+        fixed_arg = fixed_arg.replace(" ", "")
         try:
-            class_label, score = ImageClassificationLookup.classify_from_file(fixed_filename)
+            class_label, score = ImageClassificationLookup.classify_from_file(fixed_arg)
             return "Image provided represent a sample of " + class_label + " x-ray image, determined with " + str(round(
                 score * 100.0, 2)) + " % certainty."
         except:
             return "Sorry, I was not able to find your file"
-    if aiml_answer.split("#")[0] == "objectdetection":
-        fixed_filename = aiml_answer.split("#")[1].replace("Z2IKzn", ".")
-        fixed_filename = fixed_filename.replace(" ", "")
-        print("Here")
-        ObjectDetection.inference_from_file(fixed_filename)
+    if aiml_answer.split("#")[0] == "objectdetectiononphoto":
+        fixed_arg = aiml_answer.split("#")[1].replace("Z2IKzn", ".")
+        fixed_arg = fixed_arg.replace(" ", "")
+        try:
+            ObjectDetection.inference_from_file(fixed_arg)
+        except:
+            return "Error opening your image"
         return "Opening inference results"
+    if aiml_answer.split("#")[0] == "objectdetectiononcamera":
+        fixed_arg = aiml_answer.split("#")[1].replace("Z2IKzn", ".")
+        fixed_arg = fixed_arg.replace(" ", "")
+        try:
+            ObjectDetection.inference_on_camera(fixed_arg)
+            # ObjectDetection.inference_from_file(fixed_arg)
+        except:
+            return "Error opening your camera"
+        return "Running inference"
     if aiml_answer.split("#")[0] == "notinaiml":  # if answer is not in aiml use Similarity based lookup
         ok, similarity_answer = SimilarityBasedLookup.get_answer(user_query, confidence_threshold=0.25)
         if ok:
