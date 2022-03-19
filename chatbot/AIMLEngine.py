@@ -37,7 +37,7 @@ def get_response(query: str) -> str:
     # Still not sure on shall autocorrect should be used here
     # query = query.lower()
     # query_corrected = _spell(query)
-    # if query_corrected != query:
+    # if query_corrected != query:p
     #    logging.info("Corrected {0} into {1}".format(query, query_corrected))
     #    query = query_corrected
     return _aiml_kernel.respond(query)
