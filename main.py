@@ -17,9 +17,15 @@ if __name__ == "__main__":
     # Knowledge based lookup will use data from our KB txt file, load it in
     KnowledgeBasedLookup.load_knowledge_base('./dataset/kb_set.txt')
     # Load in our image classification model
-    ImageClassificationLookup.load_model('./dataset/model.h5', classes=["Normal", "Pneumonia"])
+    ImageClassificationLookup.load_model('./dataset/pneumonia-detection-model-via-loss-3-0.3.h5',
+                                         classes=["Normal", "Pneumonia"])
     # Load in yolov5 neural network for general object detection
-    ObjectDetection.load_network('yolov5n.pt', input_width=640, iou_thres=0.5, conf_threshold=0.25)
+    try:
+        with open("./dataset/coco.names") as f:
+            lines = f.read().splitlines()
+        ObjectDetection.load_network('yolov5n.pt', input_width=640, iou_thres=0.5, conf_threshold=0.25, classes=lines)
+    except:
+        ObjectDetection.load_network('yolov5n.pt', input_width=640, iou_thres=0.5, conf_threshold=0.25)
     while True:
         try:
             user_query = input(">>")
