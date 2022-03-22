@@ -1,3 +1,4 @@
+import random
 import sys
 from pathlib import Path
 
@@ -6,24 +7,43 @@ import numpy as np
 import torch
 
 sys.path.append(str(Path(__file__).parent.absolute()))
-from models.experimental import attempt_load
-from utils.general import non_max_suppression
+sys.path.append(str(Path(__file__).parent.absolute()) + "/_yolov5")
+
+from _yolov5.models.experimental import attempt_load
+from _yolov5.utils.general import non_max_suppression
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 RED_COLOR = (0, 0, 255)
 
 _detection_network = None
 _classes = []
+_class_colors = []
 
 
 class ObjectDetection:
     def __init__(self, model_path, input_width=320, conf_threshold=0.25, iou_thres=0.45):
+        """
+
+        Args:
+            model_path:
+            input_width:
+            conf_threshold:
+            iou_thres:
+        """
         self.yolo_model = attempt_load(weights=model_path, map_location=device)
         self.input_width = input_width
         self.conf_threshold = conf_threshold
         self.iou_thres = iou_thres
 
     def detect(self, main_img):
+        """
+
+        Args:
+            main_img:
+
+        Returns:
+
+        """
         height, width = main_img.shape[:2]
         new_height = int((((self.input_width / width) * height) // 32) * 32)
 
@@ -59,33 +79,87 @@ class ObjectDetection:
         return items
 
 
+def _get_random_color():
+    """
+
+    Returns:
+
+    """
+    return random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
+
+
 def load_network(model_path, input_width=320, conf_threshold=0.25, iou_thres=0.45, classes=[]):
+    """
+
+    Args:
+        model_path:
+        input_width:
+        conf_threshold:
+        iou_thres:
+        classes:
+
+    Returns:
+
+    """
     global _detection_network
     global _classes
+    global _class_colors
     _detection_network = ObjectDetection(model_path, input_width, conf_threshold, iou_thres)
     _classes = classes
+    if classes:
+        for i in range(0, len(classes)):
+            _class_colors.append(_get_random_color())
+    else:
+        for i in range(0, 1000):
+            _class_colors.append(_get_random_color())
 
 
 def _inference_frame(img):
+    """
+
+    Args:
+        img:
+
+    Returns:
+
+    """
     assert _detection_network is not None, "You first need to load in your neural network via load_network()"
     items = _detection_network.detect(img)
     return items
 
 
 def _draw_on_frame(frame, items):
+    """
+
+    Args:
+        frame:
+        items:
+
+    Returns:
+
+    """
     for obj in items:
         label = obj['label']
+        color = _class_colors[label]
         if _classes:
             label = _classes[label]
         score = obj['score']
         [(xmin, ymin), (xmax, ymax)] = obj['bbox']
-        frame = cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), RED_COLOR, 2)
+        frame = cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), color, 2)
         frame = cv2.putText(frame, f'{label} ({str(score)})', (xmin, ymin), cv2.FONT_HERSHEY_SIMPLEX, 0.75,
-                            RED_COLOR, 1, cv2.LINE_AA)
+                            color, 1, cv2.LINE_AA)
     return frame
 
 
 def inference_from_file(img_path):
+    """
+
+    Args:
+        img_path:
+
+    Returns:
+
+    """
     img = cv2.imread(img_path)
     items = _inference_frame(img)
     img = _draw_on_frame(img, items)
@@ -95,12 +169,20 @@ def inference_from_file(img_path):
 
 
 def inference_on_camera(camera="/dev/video0"):
+    """
+
+    Args:
+        camera:
+
+    Returns:
+
+    """
     camera = cv2.VideoCapture(camera)
 
     while True:
         ok, frame = camera.read()
         if not ok:
-            break
+            raise IOError
         objs = _inference_frame(frame)
         frame = _draw_on_frame(frame, objs)
         cv2.imshow("Result", frame)

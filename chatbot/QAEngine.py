@@ -62,8 +62,6 @@ def _get_real_question_id(question: str, confidence_threshold: float = 0.00) -> 
     df = pd.DataFrame(doc_term_matrix)
     cs = cosine_similarity(df, df)[len(_questions) - 1]
     cs = np.delete(cs, -1)  # remove our question from the scores
-    if logging.INFO >= logging.root.level:
-        print(cs)
     _questions.pop()
     index = np.argmax(cs)
     if cs[index] >= confidence_threshold:

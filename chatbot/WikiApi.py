@@ -9,8 +9,6 @@ from typing import Tuple
 import autocorrect
 import wikipedia
 
-# logging.basicConfig(level=logging.CRITICAL)  # change critical to info to display information
-
 # Initialize the spell checker we are going to use to autocorrect questions
 _spell = autocorrect.Speller("en")
 

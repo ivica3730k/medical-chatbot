@@ -7,14 +7,22 @@ import tensorflow as tf
 
 _dir_path = os.path.dirname(os.path.realpath(__file__)) + "/"
 
-# np.set_printoptions(suppress=True)
-
 _model = None
 _model_size = ()
 _classes = []
 
 
 def load_model(model_filepath: str = _dir_path + "model.h5", model_size: tuple = (224, 224), classes: list = []):
+    """
+
+    Args:
+        model_filepath:
+        model_size:
+        classes:
+
+    Returns:
+
+    """
     global _model
     global _model_size
     global _classes
@@ -25,6 +33,14 @@ def load_model(model_filepath: str = _dir_path + "model.h5", model_size: tuple =
 
 
 def classify_from_file(img_path):
+    """
+
+    Args:
+        img_path:
+
+    Returns:
+
+    """
     assert _model is not None, "You need to load your model first using load_model()"
     img = cv2.imread(img_path)
     img = cv2.resize(img, (224, 224), interpolation=cv2.INTER_AREA)
@@ -41,6 +57,14 @@ def classify_from_file(img_path):
 
 
 def classify_from_image(img):
+    """
+
+    Args:
+        img:
+
+    Returns:
+
+    """
     assert _model is not None, "You need to load your model first using load_model()"
     img = cv2.resize(img, (224, 224), interpolation=cv2.INTER_AREA)
     img = tf.image.per_image_standardization(img)
@@ -53,9 +77,3 @@ def classify_from_image(img):
             return _classes[class_id], score
         else:
             return class_id, score
-
-
-if __name__ == "__main__":
-    pass
-    # load_model(classes=["normal", "pneumonia"])
-    # D(classify_from_file("/home/ivica/Downloads/pneumonia.jpeg"))

@@ -175,6 +175,13 @@
         </template>
     </category>
 
+    <category>
+        <pattern>OBJECT DETECTION ON PHOTO VIA AZURE *</pattern>
+        <template>objectdetectiononphotoviaazure#
+            <star index="1"/>
+        </template>
+    </category>
+
 
     <!-- Default reaction -->
     <category>

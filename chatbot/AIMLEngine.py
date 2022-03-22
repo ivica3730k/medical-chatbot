@@ -4,11 +4,7 @@ The patters of the conversation are loaded in from pre-defined in an xml file.
 """
 
 import aiml
-import autocorrect
 
-# logging.basicConfig(level=logging.CRITICAL)  # change critical to info to display information
-# Initialize the spell checker we are going to use to autocorrect questions
-_spell = autocorrect.Speller("en")
 _aiml_kernel = aiml.Kernel()
 _aiml_kernel.setTextEncoding(None)
 
@@ -34,12 +30,6 @@ def get_response(query: str) -> str:
     Returns: Response from AIML agent
 
     """
-    # Still not sure on shall autocorrect should be used here
-    # query = query.lower()
-    # query_corrected = _spell(query)
-    # if query_corrected != query:p
-    #    logging.info("Corrected {0} into {1}".format(query, query_corrected))
-    #    query = query_corrected
     return _aiml_kernel.respond(query)
 
 

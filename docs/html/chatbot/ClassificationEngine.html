@@ -4,9 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>chatbot.WikiApi API documentation</title>
-<meta name="description" content="WikiAPI Module used to interface with python wikipedia module. Used when user want to retreive the data
-from wikipedia on a given topic trough chat bot." />
+<title>chatbot.ClassificationEngine API documentation</title>
+<meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -20,56 +19,92 @@ from wikipedia on a given topic trough chat bot." />
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>chatbot.WikiApi</code></h1>
+<h1 class="title">Module <code>chatbot.ClassificationEngine</code></h1>
 </header>
 <section id="section-intro">
-<p>WikiAPI Module used to interface with python wikipedia module. Used when user want to retreive the data
-from wikipedia on a given topic trough chat bot.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;
-WikiAPI Module used to interface with python wikipedia module. Used when user want to retreive the data
-from wikipedia on a given topic trough chat bot.
-&#34;&#34;&#34;
+<pre><code class="python">import logging
+import os
 
-import logging
-from typing import Tuple
+import cv2
+import numpy as np
+import tensorflow as tf
 
-import autocorrect
-import wikipedia
+_dir_path = os.path.dirname(os.path.realpath(__file__)) + &#34;/&#34;
 
-# Initialize the spell checker we are going to use to autocorrect questions
-_spell = autocorrect.Speller(&#34;en&#34;)
+_model = None
+_model_size = ()
+_classes = []
 
 
-def get_from_wiki(topic: str, sentences=3) -&gt; Tuple[bool, str]:
+def load_model(model_filepath: str = _dir_path + &#34;model.h5&#34;, model_size: tuple = (224, 224), classes: list = []):
     &#34;&#34;&#34;
-    Get the information from wikipedia on provided topic using python wikipedia module
 
     Args:
-        topic: Topic of interest
-        sentences: Number of sentences on the topic
+        model_filepath:
+        model_size:
+        classes:
 
-    Returns: Validity status, Details about the topic
+    Returns:
 
     &#34;&#34;&#34;
-    topic = topic.lower()
-    topic_corrected = _spell(topic)
-    if topic_corrected != topic:
-        logging.info(&#34;Corrected {0} into {1}&#34;.format(topic, topic_corrected))
-        topic = topic_corrected
-    try:
-        return True, wikipedia.summary(topic, sentences=sentences, auto_suggest=False)
-    except (wikipedia.DisambiguationError, wikipedia.PageError):
-        return False, &#34;&#34;
+    global _model
+    global _model_size
+    global _classes
+    _model = tf.keras.models.load_model(model_filepath)
+    _model_size = model_size
+    _classes = classes
+    logging.info(_model.summary())
 
 
-# Some code to make private members visible in documentation
-__pdoc__ = {name: True
-            for name, obj in globals().items()
-            if name.startswith(&#39;_&#39;) and callable(obj)}</code></pre>
+def classify_from_file(img_path):
+    &#34;&#34;&#34;
+
+    Args:
+        img_path:
+
+    Returns:
+
+    &#34;&#34;&#34;
+    assert _model is not None, &#34;You need to load your model first using load_model()&#34;
+    img = cv2.imread(img_path)
+    img = cv2.resize(img, (224, 224), interpolation=cv2.INTER_AREA)
+    img = tf.image.per_image_standardization(img)
+    x = np.expand_dims(img, axis=0)
+    single_prediction = _model.predict(x=x)
+    for i in range(0, single_prediction.shape[0]):
+        class_id = np.argmax(single_prediction[i])
+        score = single_prediction.flatten()[np.argmax(single_prediction[i])]
+        if len(_classes):
+            return _classes[class_id], score
+        else:
+            return class_id, score
+
+
+def classify_from_image(img):
+    &#34;&#34;&#34;
+
+    Args:
+        img:
+
+    Returns:
+
+    &#34;&#34;&#34;
+    assert _model is not None, &#34;You need to load your model first using load_model()&#34;
+    img = cv2.resize(img, (224, 224), interpolation=cv2.INTER_AREA)
+    img = tf.image.per_image_standardization(img)
+    x = np.expand_dims(img, axis=0)
+    single_prediction = _model.predict(x=x)
+    for i in range(0, single_prediction.shape[0]):
+        class_id = np.argmax(single_prediction[i])
+        score = single_prediction.flatten()[np.argmax(single_prediction[i])]
+        if len(_classes):
+            return _classes[class_id], score
+        else:
+            return class_id, score</code></pre>
 </details>
 </section>
 <section>
@@ -79,43 +114,106 @@ __pdoc__ = {name: True
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="chatbot.WikiApi.get_from_wiki"><code class="name flex">
-<span>def <span class="ident">get_from_wiki</span></span>(<span>topic: str, sentences=3) ‑> Tuple[bool, str]</span>
+<dt id="chatbot.ClassificationEngine.classify_from_file"><code class="name flex">
+<span>def <span class="ident">classify_from_file</span></span>(<span>img_path)</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Get the information from wikipedia on provided topic using python wikipedia module</p>
-<h2 id="args">Args</h2>
-<dl>
-<dt><strong><code>topic</code></strong></dt>
-<dd>Topic of interest</dd>
-<dt><strong><code>sentences</code></strong></dt>
-<dd>Number of sentences on the topic</dd>
-</dl>
-<p>Returns: Validity status, Details about the topic</p></div>
+<div class="desc"><h2 id="args">Args</h2>
+<p>img_path:
+Returns:</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def get_from_wiki(topic: str, sentences=3) -&gt; Tuple[bool, str]:
+<pre><code class="python">def classify_from_file(img_path):
     &#34;&#34;&#34;
-    Get the information from wikipedia on provided topic using python wikipedia module
 
     Args:
-        topic: Topic of interest
-        sentences: Number of sentences on the topic
+        img_path:
 
-    Returns: Validity status, Details about the topic
+    Returns:
 
     &#34;&#34;&#34;
-    topic = topic.lower()
-    topic_corrected = _spell(topic)
-    if topic_corrected != topic:
-        logging.info(&#34;Corrected {0} into {1}&#34;.format(topic, topic_corrected))
-        topic = topic_corrected
-    try:
-        return True, wikipedia.summary(topic, sentences=sentences, auto_suggest=False)
-    except (wikipedia.DisambiguationError, wikipedia.PageError):
-        return False, &#34;&#34;</code></pre>
+    assert _model is not None, &#34;You need to load your model first using load_model()&#34;
+    img = cv2.imread(img_path)
+    img = cv2.resize(img, (224, 224), interpolation=cv2.INTER_AREA)
+    img = tf.image.per_image_standardization(img)
+    x = np.expand_dims(img, axis=0)
+    single_prediction = _model.predict(x=x)
+    for i in range(0, single_prediction.shape[0]):
+        class_id = np.argmax(single_prediction[i])
+        score = single_prediction.flatten()[np.argmax(single_prediction[i])]
+        if len(_classes):
+            return _classes[class_id], score
+        else:
+            return class_id, score</code></pre>
+</details>
+</dd>
+<dt id="chatbot.ClassificationEngine.classify_from_image"><code class="name flex">
+<span>def <span class="ident">classify_from_image</span></span>(<span>img)</span>
+</code></dt>
+<dd>
+<div class="desc"><h2 id="args">Args</h2>
+<p>img:
+Returns:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def classify_from_image(img):
+    &#34;&#34;&#34;
+
+    Args:
+        img:
+
+    Returns:
+
+    &#34;&#34;&#34;
+    assert _model is not None, &#34;You need to load your model first using load_model()&#34;
+    img = cv2.resize(img, (224, 224), interpolation=cv2.INTER_AREA)
+    img = tf.image.per_image_standardization(img)
+    x = np.expand_dims(img, axis=0)
+    single_prediction = _model.predict(x=x)
+    for i in range(0, single_prediction.shape[0]):
+        class_id = np.argmax(single_prediction[i])
+        score = single_prediction.flatten()[np.argmax(single_prediction[i])]
+        if len(_classes):
+            return _classes[class_id], score
+        else:
+            return class_id, score</code></pre>
+</details>
+</dd>
+<dt id="chatbot.ClassificationEngine.load_model"><code class="name flex">
+<span>def <span class="ident">load_model</span></span>(<span>model_filepath: str = '/home/ivica/Coding/uni-chat-bot/chatbot/model.h5', model_size: tuple = (224, 224), classes: list = [])</span>
+</code></dt>
+<dd>
+<div class="desc"><h2 id="args">Args</h2>
+<p>model_filepath:
+model_size:
+classes:
+Returns:</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def load_model(model_filepath: str = _dir_path + &#34;model.h5&#34;, model_size: tuple = (224, 224), classes: list = []):
+    &#34;&#34;&#34;
+
+    Args:
+        model_filepath:
+        model_size:
+        classes:
+
+    Returns:
+
+    &#34;&#34;&#34;
+    global _model
+    global _model_size
+    global _classes
+    _model = tf.keras.models.load_model(model_filepath)
+    _model_size = model_size
+    _classes = classes
+    logging.info(_model.summary())</code></pre>
 </details>
 </dd>
 </dl>
@@ -136,7 +234,9 @@ __pdoc__ = {name: True
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="chatbot.WikiApi.get_from_wiki" href="#chatbot.WikiApi.get_from_wiki">get_from_wiki</a></code></li>
+<li><code><a title="chatbot.ClassificationEngine.classify_from_file" href="#chatbot.ClassificationEngine.classify_from_file">classify_from_file</a></code></li>
+<li><code><a title="chatbot.ClassificationEngine.classify_from_image" href="#chatbot.ClassificationEngine.classify_from_image">classify_from_image</a></code></li>
+<li><code><a title="chatbot.ClassificationEngine.load_model" href="#chatbot.ClassificationEngine.load_model">load_model</a></code></li>
 </ul>
 </li>
 </ul>
