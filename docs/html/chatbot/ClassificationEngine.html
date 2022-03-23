@@ -28,6 +28,7 @@
 </summary>
 <pre><code class="python">import logging
 import os
+from typing import Tuple
 
 import cv2
 import numpy as np
@@ -40,33 +41,36 @@ _model_size = ()
 _classes = []
 
 
-def load_model(model_filepath: str = _dir_path + &#34;model.h5&#34;, model_size: tuple = (224, 224), classes: list = []):
-    &#34;&#34;&#34;
+def load_model(model_filepath: str = _dir_path + &#34;model.h5&#34;,
+               input_size: tuple = (224, 224),
+               classes: list = []) -&gt; None:
+    &#34;&#34;&#34;Loads image classification neural network into program.
 
+    Classes argument can be omitted, in that case classification returns class ID.
     Args:
-        model_filepath:
-        model_size:
-        classes:
+        model_filepath: Filepath to the model
+        input_size: Image size for the input layer
+        TODO: Expand the tuple size to include also the channels, i.e. (224,224,3)
+        classes: List of classes model can detect, if omitted classification returns class ID
 
     Returns:
-
     &#34;&#34;&#34;
     global _model
     global _model_size
     global _classes
     _model = tf.keras.models.load_model(model_filepath)
-    _model_size = model_size
+    _model_size = input_size
     _classes = classes
     logging.info(_model.summary())
 
 
-def classify_from_file(img_path):
+def classify_from_file(img_path: str) -&gt; Tuple[str, float]:
     &#34;&#34;&#34;
-
+    Loads the image from the filesystem and returns classification results
     Args:
-        img_path:
+        img_path: Path to the image on the filesystem
 
-    Returns:
+    Returns: Classification results as tuple (class_id / class_name , score)
 
     &#34;&#34;&#34;
     assert _model is not None, &#34;You need to load your model first using load_model()&#34;
@@ -81,16 +85,16 @@ def classify_from_file(img_path):
         if len(_classes):
             return _classes[class_id], score
         else:
-            return class_id, score
+            return str(class_id), score
 
 
-def classify_from_image(img):
+def classify_from_image(img: np.array) -&gt; Tuple[str, float]:
     &#34;&#34;&#34;
-
+    Takes the numpy array as image input and performs classification, returning classification results
     Args:
-        img:
+        img: CV2 Style numpy image
 
-    Returns:
+    Returns: Classification results as tuple (class_id / class_name , score)
 
     &#34;&#34;&#34;
     assert _model is not None, &#34;You need to load your model first using load_model()&#34;
@@ -104,7 +108,7 @@ def classify_from_image(img):
         if len(_classes):
             return _classes[class_id], score
         else:
-            return class_id, score</code></pre>
+            return str(class_id), score</code></pre>
 </details>
 </section>
 <section>
@@ -115,23 +119,27 @@ def classify_from_image(img):
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="chatbot.ClassificationEngine.classify_from_file"><code class="name flex">
-<span>def <span class="ident">classify_from_file</span></span>(<span>img_path)</span>
+<span>def <span class="ident">classify_from_file</span></span>(<span>img_path: str) ‑> Tuple[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><h2 id="args">Args</h2>
-<p>img_path:
-Returns:</p></div>
+<div class="desc"><p>Loads the image from the filesystem and returns classification results</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>img_path</code></strong></dt>
+<dd>Path to the image on the filesystem</dd>
+</dl>
+<p>Returns: Classification results as tuple (class_id / class_name , score)</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def classify_from_file(img_path):
+<pre><code class="python">def classify_from_file(img_path: str) -&gt; Tuple[str, float]:
     &#34;&#34;&#34;
-
+    Loads the image from the filesystem and returns classification results
     Args:
-        img_path:
+        img_path: Path to the image on the filesystem
 
-    Returns:
+    Returns: Classification results as tuple (class_id / class_name , score)
 
     &#34;&#34;&#34;
     assert _model is not None, &#34;You need to load your model first using load_model()&#34;
@@ -146,27 +154,31 @@ Returns:</p></div>
         if len(_classes):
             return _classes[class_id], score
         else:
-            return class_id, score</code></pre>
+            return str(class_id), score</code></pre>
 </details>
 </dd>
 <dt id="chatbot.ClassificationEngine.classify_from_image"><code class="name flex">
-<span>def <span class="ident">classify_from_image</span></span>(<span>img)</span>
+<span>def <span class="ident">classify_from_image</span></span>(<span>img: <built-in function array>) ‑> Tuple[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><h2 id="args">Args</h2>
-<p>img:
-Returns:</p></div>
+<div class="desc"><p>Takes the numpy array as image input and performs classification, returning classification results</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>img</code></strong></dt>
+<dd>CV2 Style numpy image</dd>
+</dl>
+<p>Returns: Classification results as tuple (class_id / class_name , score)</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def classify_from_image(img):
+<pre><code class="python">def classify_from_image(img: np.array) -&gt; Tuple[str, float]:
     &#34;&#34;&#34;
-
+    Takes the numpy array as image input and performs classification, returning classification results
     Args:
-        img:
+        img: CV2 Style numpy image
 
-    Returns:
+    Returns: Classification results as tuple (class_id / class_name , score)
 
     &#34;&#34;&#34;
     assert _model is not None, &#34;You need to load your model first using load_model()&#34;
@@ -180,38 +192,50 @@ Returns:</p></div>
         if len(_classes):
             return _classes[class_id], score
         else:
-            return class_id, score</code></pre>
+            return str(class_id), score</code></pre>
 </details>
 </dd>
 <dt id="chatbot.ClassificationEngine.load_model"><code class="name flex">
-<span>def <span class="ident">load_model</span></span>(<span>model_filepath: str = '/home/ivica/Coding/uni-chat-bot/chatbot/model.h5', model_size: tuple = (224, 224), classes: list = [])</span>
+<span>def <span class="ident">load_model</span></span>(<span>model_filepath: str = '/home/ivica/Coding/uni-chat-bot/chatbot/model.h5', input_size: tuple = (224, 224), classes: list = []) ‑> None</span>
 </code></dt>
 <dd>
-<div class="desc"><h2 id="args">Args</h2>
-<p>model_filepath:
-model_size:
-classes:
-Returns:</p></div>
+<div class="desc"><p>Loads image classification neural network into program.</p>
+<p>Classes argument can be omitted, in that case classification returns class ID.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>model_filepath</code></strong></dt>
+<dd>Filepath to the model</dd>
+<dt><strong><code>input_size</code></strong></dt>
+<dd>Image size for the input layer</dd>
+<dt><strong><code>TODO</code></strong></dt>
+<dd>Expand the tuple size to include also the channels, i.e. (224,224,3)</dd>
+<dt><strong><code>classes</code></strong></dt>
+<dd>List of classes model can detect, if omitted classification returns class ID</dd>
+</dl>
+<p>Returns:</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def load_model(model_filepath: str = _dir_path + &#34;model.h5&#34;, model_size: tuple = (224, 224), classes: list = []):
-    &#34;&#34;&#34;
+<pre><code class="python">def load_model(model_filepath: str = _dir_path + &#34;model.h5&#34;,
+               input_size: tuple = (224, 224),
+               classes: list = []) -&gt; None:
+    &#34;&#34;&#34;Loads image classification neural network into program.
 
+    Classes argument can be omitted, in that case classification returns class ID.
     Args:
-        model_filepath:
-        model_size:
-        classes:
+        model_filepath: Filepath to the model
+        input_size: Image size for the input layer
+        TODO: Expand the tuple size to include also the channels, i.e. (224,224,3)
+        classes: List of classes model can detect, if omitted classification returns class ID
 
     Returns:
-
     &#34;&#34;&#34;
     global _model
     global _model_size
     global _classes
     _model = tf.keras.models.load_model(model_filepath)
-    _model_size = model_size
+    _model_size = input_size
     _classes = classes
     logging.info(_model.summary())</code></pre>
 </details>

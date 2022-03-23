@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
 <title>chatbot.WikiApi API documentation</title>
-<meta name="description" content="WikiAPI Module used to interface with python wikipedia module. Used when user want to retreive the data
-from wikipedia on a given topic trough chat bot." />
+<meta name="description" content="WikiAPI Module used to interface with python wikipedia module …" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -23,15 +22,17 @@ from wikipedia on a given topic trough chat bot." />
 <h1 class="title">Module <code>chatbot.WikiApi</code></h1>
 </header>
 <section id="section-intro">
-<p>WikiAPI Module used to interface with python wikipedia module. Used when user want to retreive the data
-from wikipedia on a given topic trough chat bot.</p>
+<p>WikiAPI Module used to interface with python wikipedia module.</p>
+<p>Used when user want to retreive the data from wikipedia on a given topic
+trough chat bot.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">&#34;&#34;&#34;
-WikiAPI Module used to interface with python wikipedia module. Used when user want to retreive the data
-from wikipedia on a given topic trough chat bot.
+<pre><code class="python">&#34;&#34;&#34;WikiAPI Module used to interface with python wikipedia module.
+
+Used when user want to retreive the data from wikipedia on a given topic
+trough chat bot.
 &#34;&#34;&#34;
 
 import logging
@@ -45,15 +46,14 @@ _spell = autocorrect.Speller(&#34;en&#34;)
 
 
 def get_from_wiki(topic: str, sentences=3) -&gt; Tuple[bool, str]:
-    &#34;&#34;&#34;
-    Get the information from wikipedia on provided topic using python wikipedia module
+    &#34;&#34;&#34;Get the information from wikipedia on provided topic using python
+    wikipedia module.
 
     Args:
         topic: Topic of interest
         sentences: Number of sentences on the topic
 
     Returns: Validity status, Details about the topic
-
     &#34;&#34;&#34;
     topic = topic.lower()
     topic_corrected = _spell(topic)
@@ -61,15 +61,19 @@ def get_from_wiki(topic: str, sentences=3) -&gt; Tuple[bool, str]:
         logging.info(&#34;Corrected {0} into {1}&#34;.format(topic, topic_corrected))
         topic = topic_corrected
     try:
-        return True, wikipedia.summary(topic, sentences=sentences, auto_suggest=False)
+        return True, wikipedia.summary(topic,
+                                       sentences=sentences,
+                                       auto_suggest=False)
     except (wikipedia.DisambiguationError, wikipedia.PageError):
         return False, &#34;&#34;
 
 
 # Some code to make private members visible in documentation
-__pdoc__ = {name: True
-            for name, obj in globals().items()
-            if name.startswith(&#39;_&#39;) and callable(obj)}</code></pre>
+__pdoc__ = {
+    name: True
+    for name, obj in globals().items()
+    if name.startswith(&#39;_&#39;) and callable(obj)
+}</code></pre>
 </details>
 </section>
 <section>
@@ -83,7 +87,8 @@ __pdoc__ = {name: True
 <span>def <span class="ident">get_from_wiki</span></span>(<span>topic: str, sentences=3) ‑> Tuple[bool, str]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Get the information from wikipedia on provided topic using python wikipedia module</p>
+<div class="desc"><p>Get the information from wikipedia on provided topic using python
+wikipedia module.</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>topic</code></strong></dt>
@@ -97,15 +102,14 @@ __pdoc__ = {name: True
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def get_from_wiki(topic: str, sentences=3) -&gt; Tuple[bool, str]:
-    &#34;&#34;&#34;
-    Get the information from wikipedia on provided topic using python wikipedia module
+    &#34;&#34;&#34;Get the information from wikipedia on provided topic using python
+    wikipedia module.
 
     Args:
         topic: Topic of interest
         sentences: Number of sentences on the topic
 
     Returns: Validity status, Details about the topic
-
     &#34;&#34;&#34;
     topic = topic.lower()
     topic_corrected = _spell(topic)
@@ -113,7 +117,9 @@ __pdoc__ = {name: True
         logging.info(&#34;Corrected {0} into {1}&#34;.format(topic, topic_corrected))
         topic = topic_corrected
     try:
-        return True, wikipedia.summary(topic, sentences=sentences, auto_suggest=False)
+        return True, wikipedia.summary(topic,
+                                       sentences=sentences,
+                                       auto_suggest=False)
     except (wikipedia.DisambiguationError, wikipedia.PageError):
         return False, &#34;&#34;</code></pre>
 </details>

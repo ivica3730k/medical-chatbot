@@ -1,8 +1,9 @@
-"""
-The QAEngine module is used to perform similarity-based question lookup to provide the user with
-the best possible answer.
-The similarity-based  functionality is based on a set of pre-defined Q/As in a CSV file.
-The similarity-based component is based on the bag-of-words model, tf/idf, and cosine similarity.
+"""The QAEngine module is used to perform similarity-based question lookup to
+provide the user with the best possible answer.
+
+The similarity-based  functionality is based on a set of pre-defined
+Q/As in a CSV file. The similarity-based component is based on the bag-
+of-words model, tf/idf, and cosine similarity.
 """
 
 import csv
@@ -27,20 +28,22 @@ _answers = []
 
 
 def load_qa_pair(question: str, answer: str) -> None:
-    """
-    Load the QA pair into QAPair module
+    """Load the QA pair into QAPair module.
 
     Args:
         question: Question
         answer: Answer
     """
-    _questions.append(_spell(BeautifulSoup(question, "lxml").get_text(strip=True)).lower())
+    _questions.append(
+        _spell(BeautifulSoup(question, "lxml").get_text(strip=True)).lower())
     _answers.append((BeautifulSoup(answer, "lxml").get_text(strip=True)))
 
 
-def _get_real_question_id(question: str, confidence_threshold: float = 0.00) -> Tuple[bool, int]:
-    """
-    Perform the similarity-based lookup for the real question from our QA list based on the user-entered question.
+def _get_real_question_id(question: str,
+                          confidence_threshold: float = 0.00
+                          ) -> Tuple[bool, int]:
+    """Perform the similarity-based lookup for the real question from our QA
+    list based on the user-entered question.
 
     Similarity based lookup based on bag of words and cosine similarity is used to determine the question the user most
     likely wanted to ask. User question is appended to the question list and sparse matrix is created and passed to the
@@ -70,10 +73,10 @@ def _get_real_question_id(question: str, confidence_threshold: float = 0.00) -> 
         return False, index
 
 
-def get_answer(question: str, confidence_threshold: float = 0.25) -> Tuple[bool, str]:
-    """
-    Interface function used to obtain the answer for the question provided, running similarity-based lookup
-    in the background.
+def get_answer(question: str,
+               confidence_threshold: float = 0.25) -> Tuple[bool, str]:
+    """Interface function used to obtain the answer for the question provided,
+    running similarity-based lookup in the background.
 
     Args:
         question: User question
@@ -88,7 +91,8 @@ def get_answer(question: str, confidence_threshold: float = 0.25) -> Tuple[bool,
     question = question.lower()
     question_corrected = _spell(question)
     if question_corrected != question:
-        logging.info("Corrected {0} into {1}".format(question, question_corrected))
+        logging.info("Corrected {0} into {1}".format(question,
+                                                     question_corrected))
         question = question_corrected
     ok, question_id = _get_real_question_id(question, confidence_threshold)
     if ok:
@@ -98,27 +102,29 @@ def get_answer(question: str, confidence_threshold: float = 0.25) -> Tuple[bool,
 
 
 def load_qa_csv(filepath: str) -> None:
-    """
-    Function used to load qa csv file into module
+    """Function used to load qa csv file into module.
 
     Args:
         filepath: Path to csv file
     """
     with open(filepath, encoding="latin") as csvfile:
-        for l in csv.reader(csvfile, quotechar='"', delimiter=',',
-                            quoting=csv.QUOTE_ALL, skipinitialspace=True):
+        for l in csv.reader(csvfile,
+                            quotechar='"',
+                            delimiter=',',
+                            quoting=csv.QUOTE_ALL,
+                            skipinitialspace=True):
             load_qa_pair(l[0], l[1])
 
 
 def print_qa_pairs() -> None:
-    """
-    Print QA Pairs for debug purposes
-    """
+    """Print QA Pairs for debug purposes."""
     for i in range(0, len(_answers)):
         print(_questions[i], '>>', _answers[i])
 
 
 # Some code to make private members visible in documentation
-__pdoc__ = {name: True
-            for name, obj in globals().items()
-            if name.startswith('_') and callable(obj)}
+__pdoc__ = {
+    name: True
+    for name, obj in globals().items()
+    if name.startswith('_') and callable(obj)
+}

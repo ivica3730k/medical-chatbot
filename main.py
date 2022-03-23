@@ -9,6 +9,7 @@ from chatbot import KBEngine as KnowledgeBasedLookup
 from chatbot import QAEngine as SimilarityBasedLookup
 from chatbot import WikiApi
 from chatbot import YoloV5ObjectDetectionEngine as YoloV5ObjectDetection
+from chatbot import TranslateEngine as AzureTranslation
 
 
 def get_answer(query):
@@ -99,9 +100,11 @@ if __name__ == "__main__":
         lines = f.read().splitlines()
     YoloV5ObjectDetection.load_network('./resources/yolov5n.pt', input_width=640, iou_thres=0.5, conf_threshold=0.25,
                                        classes=lines)
-    # Load in azure services
+    # Load in azure computer vision service
     AzureObjectDetection.load_credentials("https://n0781349-cv.cognitiveservices.azure.com/",
                                           "10e1d0d7661e495b8f2bc696f74a34fa")
+    # Load in azure translation service
+    AzureTranslation.load_credentials("5b235f697e86437fbf9d17d3a58b21e6", location="northeurope")
     while True:
         try:
             user_query = input(">>")

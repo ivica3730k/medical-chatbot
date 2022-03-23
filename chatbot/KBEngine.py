@@ -1,6 +1,8 @@
-"""
-The KBEngine module is used to provide the logical reasoning capabilities with the help of the NLTK library.
-Initial logic is loaded into the chatbot from the Knowledge base txt file.
+"""The KBEngine module is used to provide the logical reasoning capabilities
+with the help of the NLTK library.
+
+Initial logic is loaded into the chatbot from the Knowledge base txt
+file.
 """
 
 from nltk.inference import ResolutionProver
@@ -22,8 +24,7 @@ def load_knowledge_base(filepath: str) -> None:
 
 
 def prove_statement(a: str, b: str, c: str) -> bool:
-    """
-    Prove statement using NLTK Inference Resolution Prover
+    """Prove statement using NLTK Inference Resolution Prover.
 
     Format for proving > a(b,c)
     Args:
@@ -35,5 +36,7 @@ def prove_statement(a: str, b: str, c: str) -> bool:
         Validity of statement
     """
     expr = read_expr(a + '(' + b + ',' + c + ')')
-    answer_validity = ResolutionProver().prove(expr, _knowledge_base, verbose=False)
+    answer_validity = ResolutionProver().prove(expr,
+                                               _knowledge_base,
+                                               verbose=False)
     return answer_validity

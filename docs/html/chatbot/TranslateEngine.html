@@ -37,15 +37,17 @@ _LOCATION: str = None
 _PATH: str = &#39;/translate&#39;
 
 
-def load_credentials(subscription_key, location=&#34;global&#34;, endpoint=&#34;https://api.cognitive.microsofttranslator.com&#34;):
+def load_credentials(
+        subscription_key: str,
+        location: str = &#34;global&#34;,
+        endpoint: str = &#34;https://api.cognitive.microsofttranslator.com&#34;
+) -&gt; None:
     &#34;&#34;&#34;
-
+    Load in credentials for Azure Translator Service
     Args:
-        subscription_key:
-        location:
-        endpoint:
-
-    Returns:
+        subscription_key: Subscription key from Azure
+        location: Location for the translator, default global
+        endpoint: Endpoint for translation service
 
     &#34;&#34;&#34;
     global _SUBSCRIPTION_KEY
@@ -56,15 +58,17 @@ def load_credentials(subscription_key, location=&#34;global&#34;, endpoint=&#34;
     _ENDPOINT = endpoint
 
 
-def translate(input_text, input_language=&#34;en&#34;, output_language=&#34;hr&#34;):
+def translate(input_text: str,
+              input_language: str = &#34;en&#34;,
+              output_language: str = &#34;hr&#34;) -&gt; str:
     &#34;&#34;&#34;
-
+    Translate the input text to target language
     Args:
-        input_text:
-        input_language:
-        output_language:
+        input_text: Input text
+        input_language: Input language code, default en
+        output_language: Output language code, default hr
 
-    Returns:
+    Returns: Translated text
 
     &#34;&#34;&#34;
     assert _SUBSCRIPTION_KEY or _LOCATION or _ENDPOINT is not None, &#34;You need to load in your credentials using &#34; \
@@ -83,12 +87,12 @@ def translate(input_text, input_language=&#34;en&#34;, output_language=&#34;hr&#
         &#39;X-ClientTraceId&#39;: str(uuid.uuid4())
     }
 
-    # You can pass more than one object in body.
-    body = [{
-        &#39;text&#39;: input_text
-    }]
+    body = [{&#39;text&#39;: input_text}]
 
-    request = requests.post(constructed_url, params=params, headers=headers, json=body)
+    request = requests.post(constructed_url,
+                            params=params,
+                            headers=headers,
+                            json=body)
     response = request.json()
     a = json.dumps(response)
     b = json.loads(a)
@@ -104,27 +108,34 @@ def translate(input_text, input_language=&#34;en&#34;, output_language=&#34;hr&#
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="chatbot.TranslateEngine.load_credentials"><code class="name flex">
-<span>def <span class="ident">load_credentials</span></span>(<span>subscription_key, location='global', endpoint='https://api.cognitive.microsofttranslator.com')</span>
+<span>def <span class="ident">load_credentials</span></span>(<span>subscription_key: str, location: str = 'global', endpoint: str = 'https://api.cognitive.microsofttranslator.com') ‑> None</span>
 </code></dt>
 <dd>
-<div class="desc"><h2 id="args">Args</h2>
-<p>subscription_key:
-location:
-endpoint:
-Returns:</p></div>
+<div class="desc"><p>Load in credentials for Azure Translator Service</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>subscription_key</code></strong></dt>
+<dd>Subscription key from Azure</dd>
+<dt><strong><code>location</code></strong></dt>
+<dd>Location for the translator, default global</dd>
+<dt><strong><code>endpoint</code></strong></dt>
+<dd>Endpoint for translation service</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def load_credentials(subscription_key, location=&#34;global&#34;, endpoint=&#34;https://api.cognitive.microsofttranslator.com&#34;):
+<pre><code class="python">def load_credentials(
+        subscription_key: str,
+        location: str = &#34;global&#34;,
+        endpoint: str = &#34;https://api.cognitive.microsofttranslator.com&#34;
+) -&gt; None:
     &#34;&#34;&#34;
-
+    Load in credentials for Azure Translator Service
     Args:
-        subscription_key:
-        location:
-        endpoint:
-
-    Returns:
+        subscription_key: Subscription key from Azure
+        location: Location for the translator, default global
+        endpoint: Endpoint for translation service
 
     &#34;&#34;&#34;
     global _SUBSCRIPTION_KEY
@@ -136,27 +147,35 @@ Returns:</p></div>
 </details>
 </dd>
 <dt id="chatbot.TranslateEngine.translate"><code class="name flex">
-<span>def <span class="ident">translate</span></span>(<span>input_text, input_language='en', output_language='hr')</span>
+<span>def <span class="ident">translate</span></span>(<span>input_text: str, input_language: str = 'en', output_language: str = 'hr') ‑> str</span>
 </code></dt>
 <dd>
-<div class="desc"><h2 id="args">Args</h2>
-<p>input_text:
-input_language:
-output_language:
-Returns:</p></div>
+<div class="desc"><p>Translate the input text to target language</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>input_text</code></strong></dt>
+<dd>Input text</dd>
+<dt><strong><code>input_language</code></strong></dt>
+<dd>Input language code, default en</dd>
+<dt><strong><code>output_language</code></strong></dt>
+<dd>Output language code, default hr</dd>
+</dl>
+<p>Returns: Translated text</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def translate(input_text, input_language=&#34;en&#34;, output_language=&#34;hr&#34;):
+<pre><code class="python">def translate(input_text: str,
+              input_language: str = &#34;en&#34;,
+              output_language: str = &#34;hr&#34;) -&gt; str:
     &#34;&#34;&#34;
-
+    Translate the input text to target language
     Args:
-        input_text:
-        input_language:
-        output_language:
+        input_text: Input text
+        input_language: Input language code, default en
+        output_language: Output language code, default hr
 
-    Returns:
+    Returns: Translated text
 
     &#34;&#34;&#34;
     assert _SUBSCRIPTION_KEY or _LOCATION or _ENDPOINT is not None, &#34;You need to load in your credentials using &#34; \
@@ -175,12 +194,12 @@ Returns:</p></div>
         &#39;X-ClientTraceId&#39;: str(uuid.uuid4())
     }
 
-    # You can pass more than one object in body.
-    body = [{
-        &#39;text&#39;: input_text
-    }]
+    body = [{&#39;text&#39;: input_text}]
 
-    request = requests.post(constructed_url, params=params, headers=headers, json=body)
+    request = requests.post(constructed_url,
+                            params=params,
+                            headers=headers,
+                            json=body)
     response = request.json()
     a = json.dumps(response)
     b = json.loads(a)

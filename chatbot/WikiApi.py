@@ -1,6 +1,7 @@
-"""
-WikiAPI Module used to interface with python wikipedia module. Used when user want to retreive the data
-from wikipedia on a given topic trough chat bot.
+"""WikiAPI Module used to interface with python wikipedia module.
+
+Used when user want to retreive the data from wikipedia on a given topic
+trough chat bot.
 """
 
 import logging
@@ -14,15 +15,14 @@ _spell = autocorrect.Speller("en")
 
 
 def get_from_wiki(topic: str, sentences=3) -> Tuple[bool, str]:
-    """
-    Get the information from wikipedia on provided topic using python wikipedia module
+    """Get the information from wikipedia on provided topic using python
+    wikipedia module.
 
     Args:
         topic: Topic of interest
         sentences: Number of sentences on the topic
 
     Returns: Validity status, Details about the topic
-
     """
     topic = topic.lower()
     topic_corrected = _spell(topic)
@@ -30,12 +30,16 @@ def get_from_wiki(topic: str, sentences=3) -> Tuple[bool, str]:
         logging.info("Corrected {0} into {1}".format(topic, topic_corrected))
         topic = topic_corrected
     try:
-        return True, wikipedia.summary(topic, sentences=sentences, auto_suggest=False)
+        return True, wikipedia.summary(topic,
+                                       sentences=sentences,
+                                       auto_suggest=False)
     except (wikipedia.DisambiguationError, wikipedia.PageError):
         return False, ""
 
 
 # Some code to make private members visible in documentation
-__pdoc__ = {name: True
-            for name, obj in globals().items()
-            if name.startswith('_') and callable(obj)}
+__pdoc__ = {
+    name: True
+    for name, obj in globals().items()
+    if name.startswith('_') and callable(obj)
+}

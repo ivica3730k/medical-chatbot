@@ -1,6 +1,4 @@
-"""
-Run a rest API exposing the yolov5s object detection model
-"""
+"""Run a rest API exposing the yolov5s object detection model."""
 import argparse
 import io
 import torch
@@ -28,9 +26,12 @@ def predict():
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Flask API exposing YOLOv5 model")
+    parser = argparse.ArgumentParser(
+        description="Flask API exposing YOLOv5 model")
     parser.add_argument("--port", default=5000, type=int, help="port number")
     args = parser.parse_args()
 
-    model = torch.hub.load("ultralytics/_yolov5", "yolov5s", force_reload=True)  # force_reload to recache
-    app.run(host="0.0.0.0", port=args.port)  # debug=True causes Restarting with stat
+    model = torch.hub.load("ultralytics/_yolov5", "yolov5s",
+                           force_reload=True)  # force_reload to recache
+    app.run(host="0.0.0.0",
+            port=args.port)  # debug=True causes Restarting with stat

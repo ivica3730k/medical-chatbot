@@ -1,7 +1,5 @@
 # YOLOv5 🚀 by Ultralytics, GPL-3.0 license
-"""
-Activation functions
-"""
+"""Activation functions."""
 
 import torch
 import torch.nn as nn
@@ -10,27 +8,33 @@ import torch.nn.functional as F
 
 # SiLU https://arxiv.org/pdf/1606.08415.pdf ----------------------------------------------------------------------------
 class SiLU(nn.Module):  # export-friendly version of nn.SiLU()
+
     @staticmethod
     def forward(x):
         return x * torch.sigmoid(x)
 
 
 class Hardswish(nn.Module):  # export-friendly version of nn.Hardswish()
+
     @staticmethod
     def forward(x):
         # return x * F.hardsigmoid(x)  # for TorchScript and CoreML
-        return x * F.hardtanh(x + 3, 0.0, 6.0) / 6.0  # for TorchScript, CoreML and ONNX
+        return x * F.hardtanh(x + 3, 0.0,
+                              6.0) / 6.0  # for TorchScript, CoreML and ONNX
 
 
 # Mish https://github.com/digantamisra98/Mish --------------------------------------------------------------------------
 class Mish(nn.Module):
+
     @staticmethod
     def forward(x):
         return x * F.softplus(x).tanh()
 
 
 class MemoryEfficientMish(nn.Module):
+
     class F(torch.autograd.Function):
+
         @staticmethod
         def forward(ctx, x):
             ctx.save_for_backward(x)
@@ -49,6 +53,7 @@ class MemoryEfficientMish(nn.Module):
 
 # FReLU https://arxiv.org/abs/2007.11824 -------------------------------------------------------------------------------
 class FReLU(nn.Module):
+
     def __init__(self, c1, k=3):  # ch_in, kernel
         super().__init__()
         self.conv = nn.Conv2d(c1, c1, k, 1, 1, groups=c1, bias=False)
@@ -96,6 +101,7 @@ class MetaAconC(nn.Module):
         y = x.mean(dim=2, keepdims=True).mean(dim=3, keepdims=True)
         # batch-size 1 bug/instabilities https://github.com/ultralytics/yolov5/issues/2891
         # beta = torch.sigmoid(self.bn2(self.fc2(self.bn1(self.fc1(y)))))  # bug/unstable
-        beta = torch.sigmoid(self.fc2(self.fc1(y)))  # bug patch BN layers removed
+        beta = torch.sigmoid(self.fc2(
+            self.fc1(y)))  # bug patch BN layers removed
         dpx = (self.p1 - self.p2) * x
         return dpx * torch.sigmoid(beta * dpx) + self.p2 * x

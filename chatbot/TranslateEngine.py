@@ -9,15 +9,17 @@ _LOCATION: str = None
 _PATH: str = '/translate'
 
 
-def load_credentials(subscription_key, location="global", endpoint="https://api.cognitive.microsofttranslator.com"):
+def load_credentials(
+        subscription_key: str,
+        location: str = "global",
+        endpoint: str = "https://api.cognitive.microsofttranslator.com"
+) -> None:
     """
-
+    Load in credentials for Azure Translator Service
     Args:
-        subscription_key:
-        location:
-        endpoint:
-
-    Returns:
+        subscription_key: Subscription key from Azure
+        location: Location for the translator, default global
+        endpoint: Endpoint for translation service
 
     """
     global _SUBSCRIPTION_KEY
@@ -28,15 +30,17 @@ def load_credentials(subscription_key, location="global", endpoint="https://api.
     _ENDPOINT = endpoint
 
 
-def translate(input_text, input_language="en", output_language="hr"):
+def translate(input_text: str,
+              input_language: str = "en",
+              output_language: str = "hr") -> str:
     """
-
+    Translate the input text to target language
     Args:
-        input_text:
-        input_language:
-        output_language:
+        input_text: Input text
+        input_language: Input language code, default en
+        output_language: Output language code, default hr
 
-    Returns:
+    Returns: Translated text
 
     """
     assert _SUBSCRIPTION_KEY or _LOCATION or _ENDPOINT is not None, "You need to load in your credentials using " \
@@ -55,12 +59,12 @@ def translate(input_text, input_language="en", output_language="hr"):
         'X-ClientTraceId': str(uuid.uuid4())
     }
 
-    # You can pass more than one object in body.
-    body = [{
-        'text': input_text
-    }]
+    body = [{'text': input_text}]
 
-    request = requests.post(constructed_url, params=params, headers=headers, json=body)
+    request = requests.post(constructed_url,
+                            params=params,
+                            headers=headers,
+                            json=body)
     response = request.json()
     a = json.dumps(response)
     b = json.loads(a)

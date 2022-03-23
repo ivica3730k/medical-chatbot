@@ -1,7 +1,5 @@
 # YOLOv5 🚀 by Ultralytics, GPL-3.0 license
-"""
-utils/initialization
-"""
+"""utils/initialization."""
 
 
 def notebook_init(verbose=True):
@@ -19,12 +17,14 @@ def notebook_init(verbose=True):
     from IPython import display  # to display images and clear console output
 
     if is_colab():
-        shutil.rmtree('/content/sample_data', ignore_errors=True)  # remove colab /sample_data directory
+        shutil.rmtree(
+            '/content/sample_data',
+            ignore_errors=True)  # remove colab /sample_data directory
 
     if verbose:
         # System info
         # gb = 1 / 1000 ** 3  # bytes to GB
-        gib = 1 / 1024 ** 3  # bytes to GiB
+        gib = 1 / 1024**3  # bytes to GiB
         ram = psutil.virtual_memory().total
         total, used, free = shutil.disk_usage("/")
         display.clear_output()
