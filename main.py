@@ -1,6 +1,6 @@
 import logging
 
-logging.basicConfig(level=logging.CRITICAL)  # change critical to info to display information
+logging.basicConfig(level=logging.CRITICAL)
 
 from chatbot import AIMLEngine as AIMLBasedLookup
 from chatbot import AzureObjectDetectionEngine as AzureObjectDetection

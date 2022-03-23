@@ -17,7 +17,8 @@ from bs4 import BeautifulSoup
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# logging.basicConfig(level=logging.CRITICAL)  # change critical to info to display information
+logging.basicConfig(
+    level=logging.root.level)  # change critical to info to display information
 
 # Initialize the spell checker we are going to use to autocorrect questions
 _spell = autocorrect.Speller("en")
