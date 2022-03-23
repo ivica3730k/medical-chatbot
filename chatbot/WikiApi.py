@@ -1,6 +1,6 @@
 """WikiAPI Module used to interface with python wikipedia module.
 
-Used when user want to retreive the data from wikipedia on a given topic
+Used when user want to retrieve the data from wikipedia on a given topic
 trough chat bot.
 """
 

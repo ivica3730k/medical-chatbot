@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
 <title>chatbot.YoloV5ObjectDetectionEngine API documentation</title>
-<meta name="description" content="" />
+<meta name="description" content="Yolov5 object detection engine based on
+https://github.com/ultralytics/yolov5 used to provide object recognition
+capabilities locally." />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,11 +24,17 @@
 <h1 class="title">Module <code>chatbot.YoloV5ObjectDetectionEngine</code></h1>
 </header>
 <section id="section-intro">
+<p>Yolov5 object detection engine based on
+<a href="https://github.com/ultralytics/yolov5">https://github.com/ultralytics/yolov5</a> used to provide object recognition
+capabilities locally.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import random
+<pre><code class="python">&#34;&#34;&#34;Yolov5 object detection engine based on
+https://github.com/ultralytics/yolov5 used to provide object recognition
+capabilities locally.&#34;&#34;&#34;
+import random
 import sys
 from pathlib import Path
 from typing import List
@@ -118,7 +126,7 @@ class ObjectDetection:
         return items
 
 
-def _get_random_color() -&gt; Tuple:
+def _get_random_color() -&gt; Tuple[int, int, int]:
     &#34;&#34;&#34;Get a random color for the cv2 plots.
 
     Returns: Tuple, with 3 values ranging from 0 to 255
@@ -173,7 +181,7 @@ def _inference_frame(img: numpy.array) -&gt; List[Dict]:
     return items
 
 
-def _draw_on_frame(frame: numpy.array, items: List) -&gt; numpy.array:
+def _draw_on_frame(frame: numpy.array, items: List[Dict]) -&gt; numpy.array:
     &#34;&#34;&#34;Draws provided inference results on the provided frame.
 
     Args:
@@ -233,7 +241,15 @@ def inference_on_camera(camera: str = &#34;/dev/video0&#34;) -&gt; None:
         key = cv2.waitKey(20)
         if key == ord(&#39;a&#39;):
             cv2.destroyAllWindows()
-            break</code></pre>
+            break
+
+
+# Some code to make private members visible in documentation
+__pdoc__ = {
+    name: True
+    for name, obj in globals().items()
+    if name.startswith(&#39;_&#39;) and callable(obj)
+}</code></pre>
 </details>
 </section>
 <section>
@@ -243,6 +259,96 @@ def inference_on_camera(camera: str = &#34;/dev/video0&#34;) -&gt; None:
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="chatbot.YoloV5ObjectDetectionEngine._draw_on_frame"><code class="name flex">
+<span>def <span class="ident">_draw_on_frame</span></span>(<span>frame: <built-in function array>, items: List[Dict[~KT, ~VT]]) ‑> <built-in function array></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Draws provided inference results on the provided frame.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>frame</code></strong></dt>
+<dd>Frame to draw on</dd>
+<dt><strong><code>items</code></strong></dt>
+<dd>Inference results to draw</dd>
+</dl>
+<p>Returns: Frame with inference results drawn on it</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _draw_on_frame(frame: numpy.array, items: List[Dict]) -&gt; numpy.array:
+    &#34;&#34;&#34;Draws provided inference results on the provided frame.
+
+    Args:
+        frame: Frame to draw on
+        items: Inference results to draw
+
+    Returns: Frame with inference results drawn on it
+    &#34;&#34;&#34;
+    for obj in items:
+        label = obj[&#39;label&#39;]
+        color = _class_colors[label]
+        if _classes:
+            label = _classes[label]
+        score = obj[&#39;score&#39;]
+        [(xmin, ymin), (xmax, ymax)] = obj[&#39;bbox&#39;]
+        frame = cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), color, 2)
+        frame = cv2.putText(frame, f&#39;{label} ({str(score)})&#39;, (xmin, ymin),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 1,
+                            cv2.LINE_AA)
+    return frame</code></pre>
+</details>
+</dd>
+<dt id="chatbot.YoloV5ObjectDetectionEngine._get_random_color"><code class="name flex">
+<span>def <span class="ident">_get_random_color</span></span>(<span>) ‑> Tuple[int, int, int]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Get a random color for the cv2 plots.</p>
+<p>Returns: Tuple, with 3 values ranging from 0 to 255</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _get_random_color() -&gt; Tuple[int, int, int]:
+    &#34;&#34;&#34;Get a random color for the cv2 plots.
+
+    Returns: Tuple, with 3 values ranging from 0 to 255
+    &#34;&#34;&#34;
+    return random.randint(0, 255), random.randint(0,
+                                                  255), random.randint(0, 255)</code></pre>
+</details>
+</dd>
+<dt id="chatbot.YoloV5ObjectDetectionEngine._inference_frame"><code class="name flex">
+<span>def <span class="ident">_inference_frame</span></span>(<span>img: <built-in function array>) ‑> List[Dict[~KT, ~VT]]</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Runs the inference from the supplied cv2 frame.</p>
+<p>The detection network is must be loaded in via load_network() function before attempting inference</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>img</code></strong></dt>
+<dd>CV2 Type frame to run the inference on</dd>
+</dl>
+<p>Returns: Inference results</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _inference_frame(img: numpy.array) -&gt; List[Dict]:
+    &#34;&#34;&#34;Runs the inference from the supplied cv2 frame.
+
+    The detection network is must be loaded in via load_network() function before attempting inference
+
+    Args:
+        img: CV2 Type frame to run the inference on
+
+    Returns: Inference results
+    &#34;&#34;&#34;
+    assert _detection_network is not None, &#34;You first need to load in your neural network via load_network()&#34;
+    items = _detection_network.detect(img)
+    return items</code></pre>
+</details>
+</dd>
 <dt id="chatbot.YoloV5ObjectDetectionEngine.inference_from_file"><code class="name flex">
 <span>def <span class="ident">inference_from_file</span></span>(<span>img_path: str) ‑> None</span>
 </code></dt>
@@ -539,7 +645,10 @@ instead of class labels.</p>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
+<ul class="two-column">
+<li><code><a title="chatbot.YoloV5ObjectDetectionEngine._draw_on_frame" href="#chatbot.YoloV5ObjectDetectionEngine._draw_on_frame">_draw_on_frame</a></code></li>
+<li><code><a title="chatbot.YoloV5ObjectDetectionEngine._get_random_color" href="#chatbot.YoloV5ObjectDetectionEngine._get_random_color">_get_random_color</a></code></li>
+<li><code><a title="chatbot.YoloV5ObjectDetectionEngine._inference_frame" href="#chatbot.YoloV5ObjectDetectionEngine._inference_frame">_inference_frame</a></code></li>
 <li><code><a title="chatbot.YoloV5ObjectDetectionEngine.inference_from_file" href="#chatbot.YoloV5ObjectDetectionEngine.inference_from_file">inference_from_file</a></code></li>
 <li><code><a title="chatbot.YoloV5ObjectDetectionEngine.inference_on_camera" href="#chatbot.YoloV5ObjectDetectionEngine.inference_on_camera">inference_on_camera</a></code></li>
 <li><code><a title="chatbot.YoloV5ObjectDetectionEngine.load_network" href="#chatbot.YoloV5ObjectDetectionEngine.load_network">load_network</a></code></li>

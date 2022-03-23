@@ -1,3 +1,5 @@
+"""Classification Engine used to provide local image classification from pre
+trained CNN."""
 import logging
 import os
 from typing import Tuple
@@ -83,3 +85,11 @@ def classify_from_image(img: np.array) -> Tuple[str, float]:
             return _classes[class_id], score
         else:
             return str(class_id), score
+
+
+# Some code to make private members visible in documentation
+__pdoc__ = {
+    name: True
+    for name, obj in globals().items()
+    if name.startswith('_') and callable(obj)
+}

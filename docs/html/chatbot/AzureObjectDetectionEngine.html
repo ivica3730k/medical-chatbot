@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
 <title>chatbot.AzureObjectDetectionEngine API documentation</title>
-<meta name="description" content="" />
+<meta name="description" content="Azure Object Detection Engine used to provide azure object detection
+services on client side." />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,13 +23,22 @@
 <h1 class="title">Module <code>chatbot.AzureObjectDetectionEngine</code></h1>
 </header>
 <section id="section-intro">
+<p>Azure Object Detection Engine used to provide azure object detection
+services on client side.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import random
+<pre><code class="python">&#34;&#34;&#34;Azure Object Detection Engine used to provide azure object detection
+services on client side.&#34;&#34;&#34;
+
+import random
+from typing import Dict
+from typing import List
+from typing import Tuple
 
 import cv2
+import numpy
 import requests
 
 _SUBSCRIPTION_KEY = None
@@ -36,7 +46,7 @@ _ENDPOINT = None
 _ANALYSE_URL = None
 
 
-def _get_random_color():
+def _get_random_color() -&gt; Tuple[int, int, int]:
     &#34;&#34;&#34;Get a random color for the cv2 plots.
 
     Returns: Tuple, with 3 values ranging from 0 to 255
@@ -45,14 +55,12 @@ def _get_random_color():
                                                   255), random.randint(0, 255)
 
 
-def load_credentials(endpoint, subscription_key):
+def load_credentials(endpoint: str, subscription_key: str) -&gt; None:
     &#34;&#34;&#34;
-
+    Load in the credentials for Azure Computer Vision Service
     Args:
-        endpoint:
-        subscription_key:
-
-    Returns:
+        endpoint: Endpoint
+        subscription_key: Subscription key
 
     &#34;&#34;&#34;
     global _SUBSCRIPTION_KEY
@@ -63,14 +71,13 @@ def load_credentials(endpoint, subscription_key):
     _ANALYSE_URL = endpoint + &#34;vision/v3.2/detect&#34;
 
 
-def inference_from_file(image_path):
-    &#34;&#34;&#34;
+def inference_from_file(image_path: str) -&gt; None:
+    &#34;&#34;&#34;Runs the inference on frame after loading it in from the path provided.
+
+    The inference results are displayed to the user via CV2 window
 
     Args:
-        image_path:
-
-    Returns:
-
+        image_path: Path to the image on the filesystem
     &#34;&#34;&#34;
     assert _ANALYSE_URL is not None, &#34;You need to load in your Azure credentials with load_credentials() first!&#34;
     image_data = open(image_path, &#34;rb&#34;).read()
@@ -92,15 +99,73 @@ def inference_from_file(image_path):
     cv2.destroyAllWindows()
 
 
-def _draw_on_frame(frame, items):
-    &#34;&#34;&#34;
+def _draw_on_frame(frame: numpy.array, items: List[Dict]) -&gt; numpy.array:
+    &#34;&#34;&#34;Draws provided inference results on the provided frame.
 
     Args:
-        frame:
-        items:
+        frame: Frame to draw on
+        items: Inference results to draw
 
-    Returns:
+    Returns: Frame with inference results drawn on it
+    &#34;&#34;&#34;
+    for obj in items[&#34;objects&#34;]:
+        label = obj[&#34;object&#34;]
+        score = obj[&#34;confidence&#34;]
+        rectangle = obj[&#34;rectangle&#34;]
+        xmin = rectangle[&#34;x&#34;]
+        ymin = rectangle[&#34;y&#34;]
+        w = rectangle[&#34;w&#34;]
+        h = rectangle[&#34;h&#34;]
+        xmax = xmin + w
+        ymax = ymin + h
+        color = _get_random_color()
+        frame = cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), color, 2)
+        frame = cv2.putText(frame, f&#39;{label} ({str(score)})&#39;, (xmin, ymin),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 1,
+                            cv2.LINE_AA)
+    return frame
 
+
+# Some code to make private members visible in documentation
+__pdoc__ = {
+    name: True
+    for name, obj in globals().items()
+    if name.startswith(&#39;_&#39;) and callable(obj)
+}</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="chatbot.AzureObjectDetectionEngine._draw_on_frame"><code class="name flex">
+<span>def <span class="ident">_draw_on_frame</span></span>(<span>frame: <built-in function array>, items: List[Dict[~KT, ~VT]]) ‑> <built-in function array></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Draws provided inference results on the provided frame.</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>frame</code></strong></dt>
+<dd>Frame to draw on</dd>
+<dt><strong><code>items</code></strong></dt>
+<dd>Inference results to draw</dd>
+</dl>
+<p>Returns: Frame with inference results drawn on it</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def _draw_on_frame(frame: numpy.array, items: List[Dict]) -&gt; numpy.array:
+    &#34;&#34;&#34;Draws provided inference results on the provided frame.
+
+    Args:
+        frame: Frame to draw on
+        items: Inference results to draw
+
+    Returns: Frame with inference results drawn on it
     &#34;&#34;&#34;
     for obj in items[&#34;objects&#34;]:
         label = obj[&#34;object&#34;]
@@ -119,33 +184,48 @@ def _draw_on_frame(frame, items):
                             cv2.LINE_AA)
     return frame</code></pre>
 </details>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
-<h2 class="section-title" id="header-functions">Functions</h2>
-<dl>
-<dt id="chatbot.AzureObjectDetectionEngine.inference_from_file"><code class="name flex">
-<span>def <span class="ident">inference_from_file</span></span>(<span>image_path)</span>
+</dd>
+<dt id="chatbot.AzureObjectDetectionEngine._get_random_color"><code class="name flex">
+<span>def <span class="ident">_get_random_color</span></span>(<span>) ‑> Tuple[int, int, int]</span>
 </code></dt>
 <dd>
-<div class="desc"><h2 id="args">Args</h2>
-<p>image_path:
-Returns:</p></div>
+<div class="desc"><p>Get a random color for the cv2 plots.</p>
+<p>Returns: Tuple, with 3 values ranging from 0 to 255</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def inference_from_file(image_path):
+<pre><code class="python">def _get_random_color() -&gt; Tuple[int, int, int]:
+    &#34;&#34;&#34;Get a random color for the cv2 plots.
+
+    Returns: Tuple, with 3 values ranging from 0 to 255
     &#34;&#34;&#34;
+    return random.randint(0, 255), random.randint(0,
+                                                  255), random.randint(0, 255)</code></pre>
+</details>
+</dd>
+<dt id="chatbot.AzureObjectDetectionEngine.inference_from_file"><code class="name flex">
+<span>def <span class="ident">inference_from_file</span></span>(<span>image_path: str) ‑> None</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Runs the inference on frame after loading it in from the path provided.</p>
+<p>The inference results are displayed to the user via CV2 window</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>image_path</code></strong></dt>
+<dd>Path to the image on the filesystem</dd>
+</dl></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def inference_from_file(image_path: str) -&gt; None:
+    &#34;&#34;&#34;Runs the inference on frame after loading it in from the path provided.
+
+    The inference results are displayed to the user via CV2 window
 
     Args:
-        image_path:
-
-    Returns:
-
+        image_path: Path to the image on the filesystem
     &#34;&#34;&#34;
     assert _ANALYSE_URL is not None, &#34;You need to load in your Azure credentials with load_credentials() first!&#34;
     image_data = open(image_path, &#34;rb&#34;).read()
@@ -168,25 +248,27 @@ Returns:</p></div>
 </details>
 </dd>
 <dt id="chatbot.AzureObjectDetectionEngine.load_credentials"><code class="name flex">
-<span>def <span class="ident">load_credentials</span></span>(<span>endpoint, subscription_key)</span>
+<span>def <span class="ident">load_credentials</span></span>(<span>endpoint: str, subscription_key: str) ‑> None</span>
 </code></dt>
 <dd>
-<div class="desc"><h2 id="args">Args</h2>
-<p>endpoint:
-subscription_key:
-Returns:</p></div>
+<div class="desc"><p>Load in the credentials for Azure Computer Vision Service</p>
+<h2 id="args">Args</h2>
+<dl>
+<dt><strong><code>endpoint</code></strong></dt>
+<dd>Endpoint</dd>
+<dt><strong><code>subscription_key</code></strong></dt>
+<dd>Subscription key</dd>
+</dl></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def load_credentials(endpoint, subscription_key):
+<pre><code class="python">def load_credentials(endpoint: str, subscription_key: str) -&gt; None:
     &#34;&#34;&#34;
-
+    Load in the credentials for Azure Computer Vision Service
     Args:
-        endpoint:
-        subscription_key:
-
-    Returns:
+        endpoint: Endpoint
+        subscription_key: Subscription key
 
     &#34;&#34;&#34;
     global _SUBSCRIPTION_KEY
@@ -215,6 +297,8 @@ Returns:</p></div>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="chatbot.AzureObjectDetectionEngine._draw_on_frame" href="#chatbot.AzureObjectDetectionEngine._draw_on_frame">_draw_on_frame</a></code></li>
+<li><code><a title="chatbot.AzureObjectDetectionEngine._get_random_color" href="#chatbot.AzureObjectDetectionEngine._get_random_color">_get_random_color</a></code></li>
 <li><code><a title="chatbot.AzureObjectDetectionEngine.inference_from_file" href="#chatbot.AzureObjectDetectionEngine.inference_from_file">inference_from_file</a></code></li>
 <li><code><a title="chatbot.AzureObjectDetectionEngine.load_credentials" href="#chatbot.AzureObjectDetectionEngine.load_credentials">load_credentials</a></code></li>
 </ul>

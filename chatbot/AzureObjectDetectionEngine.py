@@ -1,3 +1,6 @@
+"""Azure Object Detection Engine used to provide azure object detection
+services on client side."""
+
 import random
 from typing import Dict
 from typing import List
@@ -90,3 +93,11 @@ def _draw_on_frame(frame: numpy.array, items: List[Dict]) -> numpy.array:
                             cv2.FONT_HERSHEY_SIMPLEX, 0.75, color, 1,
                             cv2.LINE_AA)
     return frame
+
+
+# Some code to make private members visible in documentation
+__pdoc__ = {
+    name: True
+    for name, obj in globals().items()
+    if name.startswith('_') and callable(obj)
+}

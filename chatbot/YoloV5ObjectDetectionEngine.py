@@ -1,3 +1,6 @@
+"""Yolov5 object detection engine based on
+https://github.com/ultralytics/yolov5 used to provide object recognition
+capabilities locally."""
 import random
 import sys
 from pathlib import Path
@@ -206,3 +209,11 @@ def inference_on_camera(camera: str = "/dev/video0") -> None:
         if key == ord('a'):
             cv2.destroyAllWindows()
             break
+
+
+# Some code to make private members visible in documentation
+__pdoc__ = {
+    name: True
+    for name, obj in globals().items()
+    if name.startswith('_') and callable(obj)
+}

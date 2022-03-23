@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
 <title>chatbot.ClassificationEngine API documentation</title>
-<meta name="description" content="" />
+<meta name="description" content="Classification Engine used to provide local image classification from pre
+trained CNN." />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,11 +23,15 @@
 <h1 class="title">Module <code>chatbot.ClassificationEngine</code></h1>
 </header>
 <section id="section-intro">
+<p>Classification Engine used to provide local image classification from pre
+trained CNN.</p>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import logging
+<pre><code class="python">&#34;&#34;&#34;Classification Engine used to provide local image classification from pre
+trained CNN.&#34;&#34;&#34;
+import logging
 import os
 from typing import Tuple
 
@@ -65,13 +70,13 @@ def load_model(model_filepath: str = _dir_path + &#34;model.h5&#34;,
 
 
 def classify_from_file(img_path: str) -&gt; Tuple[str, float]:
-    &#34;&#34;&#34;
-    Loads the image from the filesystem and returns classification results
+    &#34;&#34;&#34;Loads the image from the filesystem and returns classification results.
+
+    The classification network must be loaded in previously via load_model() function
     Args:
         img_path: Path to the image on the filesystem
 
     Returns: Classification results as tuple (class_id / class_name , score)
-
     &#34;&#34;&#34;
     assert _model is not None, &#34;You need to load your model first using load_model()&#34;
     img = cv2.imread(img_path)
@@ -89,13 +94,15 @@ def classify_from_file(img_path: str) -&gt; Tuple[str, float]:
 
 
 def classify_from_image(img: np.array) -&gt; Tuple[str, float]:
-    &#34;&#34;&#34;
-    Takes the numpy array as image input and performs classification, returning classification results
+    &#34;&#34;&#34;Takes the numpy array as image input and performs classification,
+    returning classification results.
+
+    The classification network must be loaded in previously via load_model() function
+
     Args:
         img: CV2 Style numpy image
 
     Returns: Classification results as tuple (class_id / class_name , score)
-
     &#34;&#34;&#34;
     assert _model is not None, &#34;You need to load your model first using load_model()&#34;
     img = cv2.resize(img, (224, 224), interpolation=cv2.INTER_AREA)
@@ -108,7 +115,15 @@ def classify_from_image(img: np.array) -&gt; Tuple[str, float]:
         if len(_classes):
             return _classes[class_id], score
         else:
-            return str(class_id), score</code></pre>
+            return str(class_id), score
+
+
+# Some code to make private members visible in documentation
+__pdoc__ = {
+    name: True
+    for name, obj in globals().items()
+    if name.startswith(&#39;_&#39;) and callable(obj)
+}</code></pre>
 </details>
 </section>
 <section>
@@ -122,7 +137,8 @@ def classify_from_image(img: np.array) -&gt; Tuple[str, float]:
 <span>def <span class="ident">classify_from_file</span></span>(<span>img_path: str) ‑> Tuple[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Loads the image from the filesystem and returns classification results</p>
+<div class="desc"><p>Loads the image from the filesystem and returns classification results.</p>
+<p>The classification network must be loaded in previously via load_model() function</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>img_path</code></strong></dt>
@@ -134,13 +150,13 @@ def classify_from_image(img: np.array) -&gt; Tuple[str, float]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def classify_from_file(img_path: str) -&gt; Tuple[str, float]:
-    &#34;&#34;&#34;
-    Loads the image from the filesystem and returns classification results
+    &#34;&#34;&#34;Loads the image from the filesystem and returns classification results.
+
+    The classification network must be loaded in previously via load_model() function
     Args:
         img_path: Path to the image on the filesystem
 
     Returns: Classification results as tuple (class_id / class_name , score)
-
     &#34;&#34;&#34;
     assert _model is not None, &#34;You need to load your model first using load_model()&#34;
     img = cv2.imread(img_path)
@@ -161,7 +177,9 @@ def classify_from_image(img: np.array) -&gt; Tuple[str, float]:
 <span>def <span class="ident">classify_from_image</span></span>(<span>img: <built-in function array>) ‑> Tuple[str, float]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Takes the numpy array as image input and performs classification, returning classification results</p>
+<div class="desc"><p>Takes the numpy array as image input and performs classification,
+returning classification results.</p>
+<p>The classification network must be loaded in previously via load_model() function</p>
 <h2 id="args">Args</h2>
 <dl>
 <dt><strong><code>img</code></strong></dt>
@@ -173,13 +191,15 @@ def classify_from_image(img: np.array) -&gt; Tuple[str, float]:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def classify_from_image(img: np.array) -&gt; Tuple[str, float]:
-    &#34;&#34;&#34;
-    Takes the numpy array as image input and performs classification, returning classification results
+    &#34;&#34;&#34;Takes the numpy array as image input and performs classification,
+    returning classification results.
+
+    The classification network must be loaded in previously via load_model() function
+
     Args:
         img: CV2 Style numpy image
 
     Returns: Classification results as tuple (class_id / class_name , score)
-
     &#34;&#34;&#34;
     assert _model is not None, &#34;You need to load your model first using load_model()&#34;
     img = cv2.resize(img, (224, 224), interpolation=cv2.INTER_AREA)

@@ -1,3 +1,6 @@
+"""Translate engine used to provide azure powered translation functionalities
+on client side."""
+
 import json
 import uuid
 
@@ -70,3 +73,11 @@ def translate(input_text: str,
     b = json.loads(a)
     b = b[0]
     return b["translations"][0]["text"]
+
+
+# Some code to make private members visible in documentation
+__pdoc__ = {
+    name: True
+    for name, obj in globals().items()
+    if name.startswith('_') and callable(obj)
+}
