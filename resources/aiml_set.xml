@@ -182,6 +182,27 @@
         </template>
     </category>
 
+    <!-- Translate engine reactions -->
+
+    <category>
+        <pattern>REPLY IN *</pattern>
+        <template>translatetarget#
+            <star index="1"/>
+        </template>
+    </category>
+
+    <category>
+        <pattern>REPLY IN CROATIAN</pattern>
+        <template>translatetargetcroatian#
+        </template>
+    </category>
+
+    <category>
+        <pattern>DO NOT TRANSLATE</pattern>
+        <template>translatetargetnone#
+            <star index="1"/>
+        </template>
+    </category>
 
     <!-- Default reaction -->
     <category>

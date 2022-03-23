@@ -11,8 +11,11 @@ from chatbot import WikiApi
 from chatbot import YoloV5ObjectDetectionEngine as YoloV5ObjectDetection
 from chatbot import TranslateEngine as AzureTranslation
 
+translate_target: str = None
+
 
 def get_answer(query):
+    global translate_target
     aiml_answer = AIMLBasedLookup.get_response(query)  # first use aiml for lookup
     if aiml_answer.split("#")[0] == "inaiml":
         return aiml_answer.split("#")[1]
@@ -77,6 +80,20 @@ def get_answer(query):
         except:
             return "You have exhausted your Azure resources, please wait a minute!"
 
+    if aiml_answer.split("#")[0] == "translatetarget":
+        fixed_arg = aiml_answer.split("#")[1].replace("Z2IKzn", ".")
+        fixed_arg = fixed_arg.replace(" ", "")
+        translate_target = fixed_arg.lower()
+        return "From now on I'll reply in " + translate_target
+
+    if aiml_answer.split("#")[0] == "translatetargetcroatian":
+        translate_target = "hr"
+        return "From now on I'll reply in Croatian"
+
+    if aiml_answer.split("#")[0] == "translatetargetnone":
+        translate_target = None
+        return "From now on I'll reply in english"
+
     if aiml_answer.split("#")[0] == "notinaiml":  # if answer is not in aiml use Similarity based lookup
         ok, similarity_answer = SimilarityBasedLookup.get_answer(query, confidence_threshold=0.25)
         if ok:
@@ -110,6 +127,8 @@ if __name__ == "__main__":
             user_query = input(">>")
             user_query = user_query.replace(".", "Z2IKzn")
             response = get_answer(user_query)
+            if translate_target:
+                response = AzureTranslation.translate(response, output_language=translate_target)
             if response:
                 print(response)
         except:
